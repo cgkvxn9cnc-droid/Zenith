@@ -1,5 +1,9 @@
 # Zenith
 
+******J'ai besoin de vous pour développer cette app. Je souhaiterais faire un équivalent de Lightroom mais en version optimiser et surtout gratuit !******
+
+
+
 **Dépôt :** [github.com/cgkvxn9cnc-droid/zenith](https://github.com/cgkvxn9cnc-droid/zenith)  
 **Cloner :** `git clone https://github.com/cgkvxn9cnc-droid/zenith.git`
 
