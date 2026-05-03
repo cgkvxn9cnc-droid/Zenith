@@ -1,0 +1,23 @@
+# Xcode
+DerivedData/
+*.xcuserstate
+*.xccheckout
+*.xcscmblueprint
+xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Secrets / signing local (ne pas publier)
+*.mobileprovision
+*.p12
+
+# Backup / archives
+*.ipa
+*.dSYM.zip
