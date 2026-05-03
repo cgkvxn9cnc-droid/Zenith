@@ -66,4 +66,4 @@ Le projet est publié sous la **licence MIT** — voir le fichier [`LICENSE`](LI
 
 ---
 
-*Projet initié par Romain Cobigo.*
+*Projet initié par Romain C*
