@@ -1,5 +1,8 @@
 # Zenith
 
+**Dépôt :** [github.com/cgkvxn9cnc-droid/zenith](https://github.com/cgkvxn9cnc-droid/zenith)  
+**Cloner :** `git clone https://github.com/cgkvxn9cnc-droid/zenith.git`
+
 Application **macOS** de flux photo locale : catalogue (SwiftData), développement **non destructif** inspiré des réglages pros (exposition, couleur, netteté, grain, etc.), histogramme sur l’aperçu, bandeau de miniatures et export par lot.
 
 Interface **SwiftUI**, rendu des prévisualisations via **Core Image**, données persistées sur disque.
@@ -27,7 +30,7 @@ Les chaînes sont préparées pour **français** et **anglais** (`Localizable.xc
 
 ## Compilation
 
-1. Cloner le dépôt.
+1. Cloner le dépôt (`git clone https://github.com/cgkvxn9cnc-droid/zenith.git`).
 2. Ouvrir `Zenith/Zenith.xcodeproj` dans Xcode.
 3. Sélectionner le schéma **Zenith** et la destination **My Mac**.
 4. **Product → Run** (⌘R).
