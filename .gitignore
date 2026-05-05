@@ -21,3 +21,9 @@ xcuserdata/
 # Backup / archives
 *.ipa
 *.dSYM.zip
+
+# Cursor IDE (paramètres locaux — ne pas versionner)
+.cursor/
+
+# Node (outils Cursor SDK sous tools/cursor-sdk/)
+node_modules/

@@ -14,6 +14,8 @@ struct ContentView: View {
 
     var body: some View {
         MainWorkspaceView()
+            .background(ZenithTheme.pageBackground)
+            .background(WindowChromeConfigurator())
             .onChange(of: scenePhase) { _, phase in
                 if phase == .inactive || phase == .background {
                     try? modelContext.save()

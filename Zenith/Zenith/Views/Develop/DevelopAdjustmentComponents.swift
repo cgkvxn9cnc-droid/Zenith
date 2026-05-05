@@ -63,7 +63,7 @@ struct DevelopSliderRow: View {
     @Binding var value: Double
     var range: ClosedRange<Double>
     var displayPercent: Bool = true
-    var accent: Color = ZenithTheme.adjustmentOrange
+    var accent: Color = ZenithTheme.sliderThumbNeutral
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -123,7 +123,7 @@ struct DevelopGradientSliderRow: View {
                     .frame(height: 5)
                     .opacity(0.85)
                 Slider(value: $value, in: range)
-                    .tint(ZenithTheme.adjustmentOrange)
+                    .tint(ZenithTheme.sliderThumbNeutral)
                     .controlSize(.small)
             }
             .frame(height: 18)
@@ -177,7 +177,7 @@ struct DevelopCurvesPreview: View {
                         control: CGPoint(x: w * (0.5 + bend), y: h * (0.5 - bend))
                     )
                 }
-                .stroke(ZenithTheme.adjustmentOrange, lineWidth: 2)
+                .stroke(Color.white.opacity(0.75), lineWidth: 2)
             }
         }
         .frame(height: 120)
@@ -204,7 +204,7 @@ struct DevelopColorWheelPair: View {
                     ),
                     lineWidth: 12
                 )
-                .background(Circle().fill(Color(red: 0.12, green: 0.12, blue: 0.13)))
+                .background(Circle().fill(ZenithTheme.developCardFill))
 
             Circle()
                 .stroke(Color.white.opacity(0.95), lineWidth: 2)

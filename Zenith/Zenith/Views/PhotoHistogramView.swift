@@ -8,84 +8,154 @@ import SwiftUI
 struct PhotoHistogramView: View {
     let photo: PhotoRecord?
 
-    @State private var bins: [Float] = []
+    @State private var data: RGBLHistogramData = .flat
+    @State private var exifLine: PhotoEXIFFormatter.Line?
 
     private var histogramRefreshToken: String {
         guard let p = photo else { return "none" }
-        let data = p.developBlob
+        let blob = p.developBlob
         var hasher = Hasher()
-        hasher.combine(data)
-        let blobTag = "\(data.count)-\(hasher.finalize())"
+        hasher.combine(blob)
+        let blobTag = "\(blob.count)-\(hasher.finalize())"
         return "\(p.id.uuidString)-\(blobTag)"
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("workspace.histogram.title")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 0) {
+            histogramBlock
+                .padding(.bottom, 6)
 
-            GeometryReader { geo in
-                Canvas { context, size in
-                    guard bins.count == 256 else { return }
-                    let barW = size.width / 256
-                    for i in 0 ..< 256 {
-                        let h = CGFloat(bins[i]) * size.height * 0.96
-                        let rect = CGRect(
-                            x: CGFloat(i) * barW,
-                            y: size.height - h - size.height * 0.02,
-                            width: max(0.5, barW),
-                            height: h
-                        )
-                        context.fill(Path(rect), with: .color(.white.opacity(0.88)))
-                    }
-                }
-            }
-            .frame(height: 72)
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Color.white.opacity(0.06))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .stroke(Color.white.opacity(0.08), lineWidth: 1)
-            )
+            exifMetadataRow
         }
         .padding(.horizontal, 12)
         .padding(.top, 8)
-        .padding(.bottom, 6)
+        .padding(.bottom, 8)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("workspace.histogram.title"))
         .task(id: histogramRefreshToken) {
             await computeHistogram()
         }
+        .onChange(of: photo?.developBlob) { _, _ in
+            Task { await computeHistogram() }
+        }
+        .onChange(of: photo?.id) { _, _ in
+            Task { await computeHistogram() }
+        }
+    }
+
+    private var histogramBlock: some View {
+        ZStack(alignment: .top) {
+            Canvas { context, canvasSize in
+                guard data.luminance.count == 256, canvasSize.width > 4, canvasSize.height > 4 else { return }
+                let inset: CGFloat = 2
+                let drawRect = CGRect(
+                    x: inset,
+                    y: inset,
+                    width: canvasSize.width - inset * 2,
+                    height: canvasSize.height - inset * 2
+                )
+                context.clip(to: Rectangle().path(in: drawRect))
+                context.fill(channelPath(bins: data.luminance, rect: drawRect), with: .color(Color(white: 0.82).opacity(0.28)))
+                context.fill(channelPath(bins: data.blue, rect: drawRect), with: .color(Color(red: 0.15, green: 0.45, blue: 1.0).opacity(0.38)))
+                context.fill(channelPath(bins: data.green, rect: drawRect), with: .color(Color(red: 0.2, green: 0.85, blue: 0.35).opacity(0.38)))
+                context.fill(channelPath(bins: data.red, rect: drawRect), with: .color(Color(red: 1.0, green: 0.22, blue: 0.18).opacity(0.38)))
+            }
+            .allowsHitTesting(false)
+
+            Rectangle()
+                .strokeBorder(Color.black, lineWidth: 1)
+                .padding(0.5)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 84)
+        .background(ZenithTheme.pageBackground)
+    }
+
+    private var exifMetadataRow: some View {
+        HStack(spacing: 0) {
+            Text(isoColumn)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            Text(focalColumn)
+                .frame(maxWidth: .infinity, alignment: .center)
+            Text(apertureColumn)
+                .frame(maxWidth: .infinity, alignment: .center)
+            Text(shutterColumn)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+        }
+        .font(.system(size: 11, weight: .regular, design: .default))
+        .foregroundStyle(Color(white: 0.52))
+    }
+
+    private var isoColumn: String {
+        guard let v = exifLine?.iso else { return "—" }
+        return "ISO \(v)"
+    }
+
+    private var focalColumn: String {
+        guard let v = exifLine?.focalLengthMM else { return "—" }
+        return "\(v) mm"
+    }
+
+    private var apertureColumn: String {
+        guard let v = exifLine?.aperture else { return "—" }
+        return "f / \(v)"
+    }
+
+    private var shutterColumn: String {
+        guard let v = exifLine?.shutter else { return "—" }
+        return v
+    }
+
+    private func channelPath(bins: [Float], rect: CGRect) -> Path {
+        var path = Path()
+        guard bins.count == 256, rect.width > 0, rect.height > 0 else { return path }
+        let w = rect.width
+        let h = rect.height
+        let step = w / 256
+        let bottom = rect.maxY
+        path.move(to: CGPoint(x: rect.minX, y: bottom))
+        for i in 0 ..< 256 {
+            let x = rect.minX + CGFloat(i) * step
+            let nh = CGFloat(bins[i]) * h * 0.96
+            path.addLine(to: CGPoint(x: x, y: bottom - nh))
+        }
+        path.addLine(to: CGPoint(x: rect.minX + w, y: bottom))
+        path.closeSubpath()
+        return path
     }
 
     private func computeHistogram() async {
         guard let photo else {
-            bins = []
+            data = .flat
+            exifLine = nil
             return
         }
         let url: URL
         do {
             url = try photo.resolvedURL()
         } catch {
-            bins = []
+            data = .flat
+            exifLine = nil
             return
         }
         let settings = photo.developSettings
-        let ci = await Task.detached(priority: .userInitiated) {
+        let ciAndExif = await Task.detached(priority: .userInitiated) {
             let started = url.startAccessingSecurityScopedResource()
             defer {
                 if started { url.stopAccessingSecurityScopedResource() }
             }
-            return DevelopPreviewRenderer.developedCIImage(url: url, settings: settings)
+            let ci = DevelopPreviewRenderer.developedCIImage(url: url, settings: settings)
+            let exif = PhotoEXIFFormatter.line(from: url)
+            return (ci, exif)
         }.value
-        guard let ci else {
-            bins = []
+        exifLine = ciAndExif.1
+        guard let ci = ciAndExif.0 else {
+            data = .flat
             return
         }
         let next = await Task.detached(priority: .utility) {
-            ImageHistogram.luminanceBins(from: ci)
+            ImageHistogram.rgbLHistogram(from: ci)
         }.value
-        bins = next
+        data = next
     }
 }

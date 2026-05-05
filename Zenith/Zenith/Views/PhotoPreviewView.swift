@@ -12,14 +12,12 @@ struct PhotoPreviewView: View {
     var compareOriginal: Bool = false
     /// 1,0 = taille « adaptée à la zone » ; minimum 5 % (0,05), maximum ~1600 %.
     @Binding var zoomScale: CGFloat
+    @Binding var developCanvasTool: DevelopCanvasTool
+    var onHealTapNormalized: ((CGFloat, CGFloat) -> Void)?
 
     @State private var preview: NSImage?
     @State private var loadToken = UUID()
     @State private var panOffset: CGSize = .zero
-    @State private var panBase: CGSize = .zero
-    @State private var isDraggingPan = false
-    @State private var pinchBaseZoom: CGFloat = 1.0
-    @State private var isPinching = false
 
     private let minZoom: CGFloat = 0.05
     private let maxZoom: CGFloat = 16
@@ -27,11 +25,15 @@ struct PhotoPreviewView: View {
     init(
         photo: PhotoRecord?,
         compareOriginal: Bool = false,
-        zoomScale: Binding<CGFloat> = .constant(1.0)
+        zoomScale: Binding<CGFloat> = .constant(1.0),
+        developCanvasTool: Binding<DevelopCanvasTool> = .constant(.none),
+        onHealTapNormalized: ((CGFloat, CGFloat) -> Void)? = nil
     ) {
         self.photo = photo
         self.compareOriginal = compareOriginal
         _zoomScale = zoomScale
+        _developCanvasTool = developCanvasTool
+        self.onHealTapNormalized = onHealTapNormalized
     }
 
     var body: some View {
@@ -44,9 +46,6 @@ struct PhotoPreviewView: View {
                     let fitted = Self.aspectFitSize(imageSize: imgSize, in: geo.size)
                     let zoomedW = max(1, fitted.width * zoomScale)
                     let zoomedH = max(1, fitted.height * zoomScale)
-                    let canPan = abs(zoomScale - 1) > 0.001
-                        || abs(panOffset.width) > 0.5
-                        || abs(panOffset.height) > 0.5
 
                     Image(nsImage: preview)
                         .resizable()
@@ -54,8 +53,6 @@ struct PhotoPreviewView: View {
                         .frame(width: zoomedW, height: zoomedH)
                         .offset(panOffset)
                         .shadow(radius: 20)
-                        .simultaneousGesture(trackpadMagnification)
-                        .simultaneousGesture(panGesture(allowed: canPan))
                 } else {
                     VStack(spacing: 12) {
                         Image(systemName: "photo.on.rectangle.angled")
@@ -70,6 +67,23 @@ struct PhotoPreviewView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .contentShape(Rectangle())
+            .overlay {
+                if photo != nil, developCanvasTool != .heal {
+                    PhotoPreviewTrackpadHost(
+                        zoomScale: $zoomScale,
+                        panOffset: $panOffset,
+                        minZoom: minZoom,
+                        maxZoom: maxZoom
+                    )
+                }
+            }
+            .overlay {
+                Group {
+                    if let prev = preview, let item = photo, developCanvasTool != .none {
+                        toolOverlayLayer(viewSize: geo.size, previewImage: prev, photo: item)
+                    }
+                }
+            }
         }
         .clipped()
         .onAppear { scheduleLoad() }
@@ -85,44 +99,51 @@ struct PhotoPreviewView: View {
             if clamped != newValue {
                 zoomScale = clamped
             }
-            // Ne pas confondre « zoom 100 % » (taille adaptée) et un fort dézoom (ex. 5 %).
             if abs(clamped - 1.0) < 0.02 {
                 panOffset = .zero
             }
         }
     }
 
-    private var trackpadMagnification: some Gesture {
-        MagnificationGesture()
-            .onChanged { value in
-                if !isPinching {
-                    isPinching = true
-                    pinchBaseZoom = zoomScale
+    @ViewBuilder
+    private func toolOverlayLayer(viewSize: CGSize, previewImage: NSImage, photo: PhotoRecord) -> some View {
+        let frame = imageDisplayRect(viewSize: viewSize, preview: previewImage)
+        let pixelRef = Self.referencePixelSize(photo: photo, preview: previewImage)
+        switch developCanvasTool {
+        case .crop:
+            DevelopCropInteractionOverlay(
+                photo: photo,
+                viewportSize: viewSize,
+                imageRect: frame,
+                imagePixelSize: pixelRef
+            )
+        case .heal:
+            DevelopPreviewToolOverlay(
+                viewportSize: viewSize,
+                imageRect: frame,
+                onHealAtNormalized: { nx, ny in
+                    onHealTapNormalized?(nx, ny)
                 }
-                zoomScale = clampZoom(pinchBaseZoom * value)
-            }
-            .onEnded { _ in
-                isPinching = false
-                pinchBaseZoom = zoomScale
-            }
+            )
+        default:
+            EmptyView()
+        }
     }
 
-    private func panGesture(allowed: Bool) -> some Gesture {
-        DragGesture(minimumDistance: 0)
-            .onChanged { value in
-                guard allowed else { return }
-                if !isDraggingPan {
-                    isDraggingPan = true
-                    panBase = panOffset
-                }
-                panOffset = CGSize(
-                    width: panBase.width + value.translation.width,
-                    height: panBase.height + value.translation.height
-                )
-            }
-            .onEnded { _ in
-                isDraggingPan = false
-            }
+    private static func referencePixelSize(photo: PhotoRecord, preview: NSImage) -> CGSize {
+        let w = photo.pixelWidth > 0 ? CGFloat(photo.pixelWidth) : preview.size.width
+        let h = photo.pixelHeight > 0 ? CGFloat(photo.pixelHeight) : preview.size.height
+        return CGSize(width: max(1, w), height: max(1, h))
+    }
+
+    private func imageDisplayRect(viewSize: CGSize, preview: NSImage) -> CGRect {
+        let imgSize = CGSize(width: preview.size.width, height: preview.size.height)
+        let fitted = Self.aspectFitSize(imageSize: imgSize, in: viewSize)
+        let zw = max(1, fitted.width * zoomScale)
+        let zh = max(1, fitted.height * zoomScale)
+        let x = (viewSize.width - zw) / 2 + panOffset.width
+        let y = (viewSize.height - zh) / 2 + panOffset.height
+        return CGRect(x: x, y: y, width: zw, height: zh)
     }
 
     private func clampZoom(_ z: CGFloat) -> CGFloat {

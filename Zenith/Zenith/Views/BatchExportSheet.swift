@@ -63,6 +63,7 @@ struct BatchExportSheet: View {
         }
         .padding(24)
         .frame(minWidth: 440)
+        .background(ZenithTheme.pageBackground)
         .alert(String(localized: "batch.export.error.title"), isPresented: Binding(
             get: { errorMessage != nil },
             set: { if !$0 { errorMessage = nil } }

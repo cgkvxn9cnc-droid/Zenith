@@ -17,4 +17,6 @@ extension Notification.Name {
     static let zenithSyncPresetToSelection = Notification.Name("zenith.syncPresetToSelection")
     static let zenithExportCatalogBackup = Notification.Name("zenith.exportCatalogBackup")
     static let zenithLinkCloudFolder = Notification.Name("zenith.linkCloudFolder")
+    static let zenithShowCatalogOverview = Notification.Name("zenith.showCatalogOverview")
+    static let zenithScrollToRemoveColor = Notification.Name("zenithScrollToRemoveColor")
 }

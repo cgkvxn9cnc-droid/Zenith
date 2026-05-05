@@ -30,6 +30,7 @@ struct FilmstripView: View {
             .padding(.vertical, 8)
         }
         .frame(height: thumbSize + 36)
+        .background(ZenithTheme.pageBackground)
         .background(ZenithTheme.glassPanel(RoundedRectangle(cornerRadius: 12)))
     }
 }

@@ -16,23 +16,75 @@ struct MainWorkspaceView: View {
     @AppStorage("zenith.fontScaleStep") private var fontScaleStep = 3
     @AppStorage("zenith.collaborationEnabled") private var collaborationEnabled = false
     @AppStorage("zenith.leftSidebarVisible") private var leftSidebarVisible = true
+    @AppStorage("zenith.workspaceMode") private var persistedWorkspaceModeRaw = WorkspaceHierarchyMode.library.rawValue
+    @AppStorage("zenith.lastSelectedPhotoID") private var persistedPhotoID = ""
 
     @State private var sidebarSelection: SidebarSelection?
-    @State private var selectedPhotoID: UUID?
     @State private var showInviteSheet = false
     @State private var showExportSheet = false
     @State private var photoImportFailureMessage: String?
     @State private var developCompareOriginal = false
     @State private var previewZoomScale: CGFloat = 1.0
+    @State private var developCanvasTool: DevelopCanvasTool = .none
     @State private var showNewCollectionSheet = false
+    @State private var showCatalogSheet = false
     @State private var newCollectionName = ""
     @FocusState private var focusWorkspace: Bool
+
+    private var workspaceMode: WorkspaceHierarchyMode {
+        WorkspaceHierarchyMode(rawValue: persistedWorkspaceModeRaw) ?? .library
+    }
+
+    private var workspaceModeBinding: Binding<WorkspaceHierarchyMode> {
+        Binding(
+            get: { WorkspaceHierarchyMode(rawValue: persistedWorkspaceModeRaw) ?? .library },
+            set: { persistedWorkspaceModeRaw = $0.rawValue }
+        )
+    }
+
+    private var selectedPhotoID: UUID? {
+        guard !persistedPhotoID.isEmpty,
+              let id = UUID(uuidString: persistedPhotoID) else { return nil }
+        return id
+    }
+
+    private var selectedPhotoIDBinding: Binding<UUID?> {
+        Binding(
+            get: { selectedPhotoID },
+            set: { newValue in
+                if let id = newValue {
+                    persistedPhotoID = id.uuidString
+                } else {
+                    persistedPhotoID = ""
+                }
+            }
+        )
+    }
 
     private let previewZoomMin: CGFloat = 0.05
     private let previewZoomMax: CGFloat = 16
 
     private let leftSidebarWidth: CGFloat = 260
-    private let rightSidebarWidth: CGFloat = 320
+    /// Colonne gauche élargie en développement (navigateur + préréglages).
+    private let developLeftSidebarWidth: CGFloat = 282
+    private let developRightSidebarWidth: CGFloat = 340
+
+    private var effectiveLeftSidebarWidth: CGFloat {
+        workspaceMode == .develop ? developLeftSidebarWidth : leftSidebarWidth
+    }
+    /// Marge verticale au-dessus et en dessous des barres latérales vitrées.
+    private let sidebarVerticalInset: CGFloat = 16
+    /// Hauteur de la barre horizontale transparente (zoom, export) au-dessus des colonnes.
+    private let topChromeBarHeight: CGFloat = 48
+    /// Décalage sous les boutons fermer / réduire / zoom une fois le contenu étendu sous la barre titre.
+    private let windowControlsTopInset: CGFloat = 28
+    /// Marge horizontale entre le bord de la fenêtre et la barre du haut (verre).
+    private let topChromeHorizontalInset: CGFloat = 16
+
+    /// Hauteur de la bande de fond sous la barre chrome (alignée sur l’overlay) : même luminance que la page pour que le verre ne suive pas l’image.
+    private var topChromeBackingBandHeight: CGFloat {
+        windowControlsTopInset + topChromeBarHeight
+    }
 
     private let dynamicTypeSteps: [DynamicTypeSize] = [.xSmall, .small, .medium, .large, .xLarge, .xxLarge, .xxxLarge]
 
@@ -52,18 +104,46 @@ struct MainWorkspaceView: View {
         )
     }
 
-    /// Canevas plein écran ; barres latérales en verre par-dessus l’aperçu seul (image visible derrière).
+    /// Bibliothèque (grille + notation) · Développement (post-production). Le catalogue est dans Fichier.
+    @ViewBuilder
+    private var mainWorkspaceCanvas: some View {
+        switch workspaceMode {
+        case .library:
+            LibraryGridView(photos: filteredPhotos, selectedPhotoID: selectedPhotoIDBinding)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        case .develop:
+            PhotoPreviewView(
+                photo: selectedPhoto,
+                compareOriginal: developCompareOriginal,
+                zoomScale: $previewZoomScale,
+                developCanvasTool: $developCanvasTool,
+                onHealTapNormalized: { x, y in
+                    applyHealTapFromPreview(x: x, y: y)
+                }
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+
+    /// Canevas principal ; barre latérale gauche (navigation) ; droite réservée au développement.
     @ViewBuilder
     private var workspaceChrome: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topLeading) {
-                PhotoPreviewView(photo: selectedPhoto, compareOriginal: developCompareOriginal, zoomScale: $previewZoomScale)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                mainWorkspaceCanvas
+
+                VStack(spacing: 0) {
+                    ZenithTheme.pageBackground
+                        .frame(height: topChromeBackingBandHeight)
+                    Spacer(minLength: 0)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .allowsHitTesting(false)
 
                 HStack(alignment: .top, spacing: 0) {
                     if leftSidebarVisible {
                         leftGlassSidebar
-                            .frame(width: leftSidebarWidth)
+                            .frame(width: effectiveLeftSidebarWidth)
                             .frame(maxHeight: .infinity, alignment: .top)
                             .transition(.move(edge: .leading).combined(with: .opacity))
                     }
@@ -71,62 +151,137 @@ struct MainWorkspaceView: View {
                     Spacer(minLength: 0)
                         .allowsHitTesting(false)
 
-                    rightGlassSidebar
-                        .frame(width: rightSidebarWidth)
-                        .frame(maxHeight: .infinity, alignment: .top)
+                    if workspaceMode == .develop {
+                        rightGlassSidebar
+                            .frame(width: developRightSidebarWidth)
+                            .frame(maxHeight: .infinity, alignment: .top)
+                    }
                 }
+                .padding(.top, windowControlsTopInset + topChromeBarHeight + sidebarVerticalInset)
+                .padding(.bottom, sidebarVerticalInset)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .animation(.snappy(duration: 0.22), value: leftSidebarVisible)
-
-                if !leftSidebarVisible {
-                    Button {
-                        leftSidebarVisible = true
-                    } label: {
-                        Image(systemName: "sidebar.left")
-                            .font(.system(size: 15))
-                            .frame(width: 32, height: 32)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.borderless)
-                    .padding(.leading, 10)
-                    .padding(.top, 10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .fill(.ultraThinMaterial)
-                    )
-                    .help(String(localized: "workspace.sidebar.show"))
-                    .accessibilityLabel(Text("workspace.sidebar.show"))
-                    .zIndex(3)
-                }
+            }
+            .overlay(alignment: .top) {
+                topWorkspaceChromeBar
+                    .padding(.horizontal, topChromeHorizontalInset)
+                    .padding(.top, windowControlsTopInset)
+                    .frame(maxWidth: .infinity)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            FilmstripView(photos: filteredPhotos, selection: $selectedPhotoID)
-                .zIndex(2)
-
-            bottomChromeBar
-                .zIndex(2)
+            if workspaceMode == .develop {
+                FilmstripView(photos: filteredPhotos, selection: selectedPhotoIDBinding)
+                    .zIndex(2)
+            }
         }
         .frame(minWidth: 900, minHeight: 500)
     }
 
     @ViewBuilder
+    private var developAuxiliaryColumn: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            if let photo = selectedPhoto {
+                DevelopNavigatorThumb(photo: photo)
+                    .padding(.horizontal, 10)
+                    .padding(.top, 8)
+                PresetsPanel(photo: photo, compact: true)
+                developCopyPasteToolbar
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 8)
+            } else {
+                Spacer(minLength: 0)
+                Text("workspace.select_for_develop")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
+                    .padding(12)
+                Spacer(minLength: 0)
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    }
+
+    private var developCopyPasteToolbar: some View {
+        HStack(spacing: 8) {
+            Button {
+                NotificationCenter.default.post(name: .zenithCopyDevelop, object: nil)
+            } label: {
+                Label(String(localized: "develop.toolbar.copy"), systemImage: "doc.on.doc")
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .disabled(selectedPhoto == nil)
+
+            Button {
+                NotificationCenter.default.post(name: .zenithPasteDevelop, object: nil)
+            } label: {
+                Label(String(localized: "develop.toolbar.paste"), systemImage: "doc.on.clipboard")
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .disabled(selectedPhoto == nil)
+        }
+    }
+
+    private var collectionsSidebarNavigation: some View {
+        NavigationStack {
+            CollectionsSidebar(
+                collections: collections,
+                photos: photos,
+                selection: $sidebarSelection,
+                onAddCollection: { showNewCollectionSheet = true }
+            )
+        }
+    }
+
+    private var workspaceModeSidebarPicker: some View {
+        Picker("", selection: workspaceModeBinding) {
+            Text("workspace.mode.library").tag(WorkspaceHierarchyMode.library)
+            Text("workspace.mode.develop").tag(WorkspaceHierarchyMode.develop)
+        }
+        .pickerStyle(.segmented)
+        .labelsHidden()
+        .accessibilityLabel(Text("workspace.mode.picker_a11y"))
+    }
+
+    @ViewBuilder
     private var leftGlassSidebar: some View {
         VStack(spacing: 0) {
-            leftSidebarHeaderBar
-
+            workspaceModeSidebarPicker
+                .padding(.horizontal, 10)
+                .padding(.top, 8)
+                .padding(.bottom, 6)
+            Divider()
+                .opacity(0.28)
             Group {
-                if collaborationEnabled {
-                    VSplitView {
-                        NavigationStack {
-                            CollectionsSidebar(
-                                collections: collections,
-                                photos: photos,
-                                selection: $sidebarSelection,
-                                onAddCollection: { showNewCollectionSheet = true }
+                if workspaceMode == .develop {
+                    if collaborationEnabled {
+                        VSplitView {
+                            VSplitView {
+                                collectionsSidebarNavigation
+                                    .frame(minHeight: 100, idealHeight: 200)
+                                developAuxiliaryColumn
+                            }
+                            .frame(minHeight: 260)
+
+                            ChatPanel(
+                                photos: filteredPhotos,
+                                selectedPhotoID: selectedPhotoID
                             )
+                            .frame(minHeight: 140)
                         }
-                        .frame(minHeight: 200)
+                    } else {
+                        VSplitView {
+                            collectionsSidebarNavigation
+                                .frame(minHeight: 100, idealHeight: 200)
+                            developAuxiliaryColumn
+                        }
+                    }
+                } else if collaborationEnabled {
+                    VSplitView {
+                        collectionsSidebarNavigation
+                            .frame(minHeight: 200)
 
                         ChatPanel(
                             photos: filteredPhotos,
@@ -135,14 +290,7 @@ struct MainWorkspaceView: View {
                         .frame(minHeight: 160)
                     }
                 } else {
-                    NavigationStack {
-                        CollectionsSidebar(
-                            collections: collections,
-                            photos: photos,
-                            selection: $sidebarSelection,
-                            onAddCollection: { showNewCollectionSheet = true }
-                        )
-                    }
+                    collectionsSidebarNavigation
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -151,62 +299,206 @@ struct MainWorkspaceView: View {
         .background {
             ZenithTheme.liquidSidebarGlass(ZenithTheme.sidebarGlassShapeLeading)
         }
-        .clipped()
+        .clipShape(ZenithTheme.sidebarGlassShapeLeading)
     }
 
-    /// Bouton masquer la barre gauche (en haut de la colonne).
-    private var leftSidebarHeaderBar: some View {
-        HStack {
+    /// Barre du haut : gauche (sidebar + drapeaux / dimensions en développement), centre (notation + zoom), export à droite.
+    private var topWorkspaceChromeBar: some View {
+        HStack(alignment: .center, spacing: 10) {
+            leadingTopChromeCluster
+
+            Spacer(minLength: 8)
+
+            centerTopChromeCluster
+                .frame(maxWidth: .infinity)
+
+            Spacer(minLength: 8)
+
+            trailingExportButton
+        }
+        .padding(.horizontal, 12)
+        .frame(height: topChromeBarHeight)
+        .background {
+            ZenithTheme.liquidSidebarGlass(ZenithTheme.topChromeGlassShape)
+        }
+        .clipShape(ZenithTheme.topChromeGlassShape)
+    }
+
+    /// Notation (étoiles) et zoom regroupés au centre de la barre.
+    private var centerTopChromeCluster: some View {
+        HStack(spacing: 12) {
+            Spacer(minLength: 0)
+            if let photo = selectedPhoto {
+                starPicker(for: photo)
+            }
+            if workspaceMode == .develop {
+                previewZoomSliderCluster
+                    .frame(maxWidth: 320)
+            }
+            Spacer(minLength: 0)
+        }
+        .frame(height: 36, alignment: .center)
+    }
+
+    /// Gauche de la barre du haut : masquage sidebar ; drapeaux et dimensions en mode développement.
+    private var leadingTopChromeCluster: some View {
+        HStack(alignment: .center, spacing: 8) {
+            if leftSidebarVisible {
+                sidebarHideButton
+            } else {
+                sidebarShowButton
+            }
+
+            if let photo = selectedPhoto, workspaceMode == .develop {
+                Divider()
+                    .frame(height: 22)
+                    .opacity(0.35)
+
+                flagPicker(for: photo)
+                Text("\(photo.pixelWidth)×\(photo.pixelHeight)")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(.secondary)
+                    .frame(minWidth: 72, alignment: .leading)
+                    .lineLimit(1)
+            }
+        }
+        .frame(height: 36, alignment: .center)
+    }
+
+    private var trailingExportButton: some View {
+        Button {
+            showExportSheet = true
+        } label: {
+            Image(systemName: "square.and.arrow.up")
+                .font(.system(size: 15, weight: .medium))
+                .foregroundStyle(.primary)
+                .frame(width: 36, height: 36)
+                .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        }
+        .buttonStyle(WorkspaceChromeIconButtonStyle())
+        .help(String(localized: "batch.export.title"))
+        .accessibilityLabel(Text("batch.export.title"))
+        .frame(height: 36, alignment: .center)
+    }
+
+    private var sidebarHideButton: some View {
+        Button {
+            leftSidebarVisible = false
+        } label: {
+            Image(systemName: "sidebar.right")
+                .font(.system(size: 15, weight: .regular))
+                .foregroundStyle(.primary)
+                .frame(width: 36, height: 36)
+                .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        }
+        .buttonStyle(WorkspaceChromeIconButtonStyle())
+        .help(String(localized: "workspace.sidebar.hide"))
+        .accessibilityLabel(Text("workspace.sidebar.hide"))
+    }
+
+    private var sidebarShowButton: some View {
+        Button {
+            leftSidebarVisible = true
+        } label: {
+            Image(systemName: "sidebar.left")
+                .font(.system(size: 15, weight: .regular))
+                .foregroundStyle(.primary)
+                .frame(width: 36, height: 36)
+                .contentShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+        }
+        .buttonStyle(WorkspaceChromeIconButtonStyle())
+        .help(String(localized: "workspace.sidebar.show"))
+        .accessibilityLabel(Text("workspace.sidebar.show"))
+    }
+
+    /// Curseur zoom (échelle logarithmique) et réinitialisation, centrés dans la fenêtre.
+    private var previewZoomSliderCluster: some View {
+        HStack(spacing: 10) {
+            Slider(value: previewZoomLogBinding, in: log(Double(previewZoomMin)) ... log(Double(previewZoomMax)))
+                .controlSize(.small)
+
+            Text("\(Int((previewZoomScale * 100).rounded()))%")
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(.secondary)
+                .frame(width: 44, alignment: .trailing)
+                .lineLimit(1)
+
             Button {
-                leftSidebarVisible = false
+                previewZoomScale = 1.0
             } label: {
-                Image(systemName: "sidebar.right")
-                    .font(.system(size: 15))
+                Image(systemName: "arrow.counterclockwise")
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.secondary)
                     .frame(width: 28, height: 28)
                     .contentShape(Rectangle())
             }
-            .buttonStyle(.borderless)
-            .help(String(localized: "workspace.sidebar.hide"))
-            .accessibilityLabel(Text("workspace.sidebar.hide"))
-
-            Spacer(minLength: 0)
+            .buttonStyle(.plain)
+            .disabled(abs(previewZoomScale - 1.0) < 0.000_1)
+            .help(String(localized: "preview.zoom.reset"))
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity)
-        .background(Color.clear)
+    }
+
+    private var previewZoomLogBinding: Binding<Double> {
+        let lo = log(Double(previewZoomMin))
+        let hi = log(Double(previewZoomMax))
+        return Binding(
+            get: {
+                let z = Double(min(max(previewZoomScale, previewZoomMin), previewZoomMax))
+                return log(z).clamped(to: lo ... hi)
+            },
+            set: { logVal in
+                let z = exp(logVal.clamped(to: lo ... hi))
+                previewZoomScale = CGFloat(min(max(z, Double(previewZoomMin)), Double(previewZoomMax)))
+            }
+        )
     }
 
     @ViewBuilder
     private var rightGlassSidebar: some View {
         VStack(spacing: 0) {
-            previewZoomToolbar
-                .frame(maxWidth: .infinity)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 8)
-                .background(Color.clear)
-
-            ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
-                    if let photo = selectedPhoto {
-                        PhotoHistogramView(photo: photo)
-                        DevelopPanel(photo: photo, compareOriginal: $developCompareOriginal)
-                        Divider().padding(.vertical, 8)
-                        PresetsPanel(photo: photo)
-                    } else {
-                        Text("workspace.select_for_develop")
-                            .foregroundStyle(.secondary)
-                            .padding(16)
+            if let photo = selectedPhoto {
+                PhotoHistogramView(photo: photo)
+                DevelopToolStrip(photo: photo, activeTool: $developCanvasTool)
+                Text("develop.column.adjustments")
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal, 12)
+                    .padding(.top, 6)
+                    .padding(.bottom, 2)
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        DevelopPanel(photo: photo)
+                            .padding(.horizontal, 10)
+                    }
+                    .scrollIndicators(.automatic)
+                    .onReceive(NotificationCenter.default.publisher(for: .zenithScrollToRemoveColor)) { _ in
+                        withAnimation(.snappy(duration: 0.25)) {
+                            proxy.scrollTo("removeColorCard", anchor: .top)
+                        }
                     }
                 }
+                Divider()
+                    .opacity(0.25)
+                DevelopPanelFooter(compareOriginal: $developCompareOriginal) {
+                    photo.resetDevelopToNeutral()
+                    try? modelContext.save()
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
+            } else {
+                Spacer(minLength: 0)
+                Text("workspace.select_for_develop")
+                    .foregroundStyle(.secondary)
+                    .padding(16)
+                Spacer(minLength: 0)
             }
-            .scrollIndicators(.automatic)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background {
             ZenithTheme.liquidSidebarGlass(ZenithTheme.sidebarGlassShapeTrailing)
         }
-        .clipped()
+        .clipShape(ZenithTheme.sidebarGlassShapeTrailing)
     }
 
     private func onWorkspaceAppear() {
@@ -225,11 +517,38 @@ struct MainWorkspaceView: View {
             }
         }
         focusWorkspace = true
+        validatePersistedPhotoSelection()
+    }
+
+    private func validatePersistedPhotoSelection() {
+        guard !persistedPhotoID.isEmpty else { return }
+        guard let id = UUID(uuidString: persistedPhotoID) else {
+            persistedPhotoID = ""
+            return
+        }
+        if !photos.contains(where: { $0.id == id }) {
+            persistedPhotoID = ""
+        }
+    }
+
+    private func applyHealTapFromPreview(x: CGFloat, y: CGFloat) {
+        guard let photo = selectedPhoto else { return }
+        var s = photo.developSettings
+        s.healNormX = Double(min(max(x, 0), 1))
+        s.healNormY = Double(min(max(y, 0), 1))
+        if s.healRadiusPx < 8 {
+            s.healRadiusPx = 36
+        }
+        photo.applyDevelopSettings(s)
+        try? modelContext.save()
     }
 
     /// Découpe pour le typage du compilateur (SwiftUI).
     private var workspaceRoot: some View {
         workspaceChrome
+            .background(ZenithTheme.pageBackground)
+            // Dessine sous la zone titre : avec `titlebarAppearsTransparent`, l’aperçu remplit la bande au lieu d’un gris système.
+            .ignoresSafeArea(.container, edges: .top)
             .tint(ZenithTheme.accent)
             .preferredColorScheme(.dark)
             .environment(\.dynamicTypeSize, resolvedDynamicType)
@@ -238,8 +557,12 @@ struct MainWorkspaceView: View {
     private var workspaceWithLifecycle: some View {
         workspaceRoot
             .onAppear { onWorkspaceAppear() }
-            .onChange(of: selectedPhotoID) { _, _ in
+            .onChange(of: persistedPhotoID) { _, _ in
                 previewZoomScale = 1.0
+                developCanvasTool = .none
+            }
+            .onChange(of: photos.count) { _, _ in
+                validatePersistedPhotoSelection()
             }
             .onChange(of: collections.count) { _, _ in
                 if sidebarSelection == nil {
@@ -286,6 +609,9 @@ struct MainWorkspaceView: View {
             .onReceive(NotificationCenter.default.publisher(for: .zenithLinkCloudFolder)) { _ in
                 runLinkCloudFolder()
             }
+            .onReceive(NotificationCenter.default.publisher(for: .zenithShowCatalogOverview)) { _ in
+                showCatalogSheet = true
+            }
     }
 
     var body: some View {
@@ -294,6 +620,26 @@ struct MainWorkspaceView: View {
                 Button("import.alert.ok", role: .cancel) { photoImportFailureMessage = nil }
             } message: {
                 Text(photoImportFailureMessage ?? "")
+            }
+            .sheet(isPresented: $showCatalogSheet) {
+                NavigationStack {
+                    CatalogOverviewView(
+                        photoCount: photos.count,
+                        collectionFolderCount: collections.count,
+                        onImportPhotos: { runImport() }
+                    )
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                    .background(ZenithTheme.pageBackground)
+                    .navigationTitle(Text("catalog.overview.title"))
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button(String(localized: "catalog.sheet.done")) {
+                                showCatalogSheet = false
+                            }
+                        }
+                    }
+                }
+                .frame(minWidth: 480, minHeight: 440)
             }
             .sheet(isPresented: $showInviteSheet) {
                 CollaborationInviteSheet()
@@ -316,77 +662,9 @@ struct MainWorkspaceView: View {
                 }
                 .padding()
                 .frame(minWidth: 280)
+                .background(ZenithTheme.pageBackground)
             }
             .focused($focusWorkspace)
-    }
-
-    /// Barre horizontale basse : notation / drapeaux / dimensions.
-    private var bottomChromeBar: some View {
-        HStack(alignment: .center, spacing: 12) {
-            if let photo = selectedPhoto {
-                starPicker(for: photo)
-                flagPicker(for: photo)
-                Text("\(photo.pixelWidth)×\(photo.pixelHeight)")
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
-                    .frame(width: 96, alignment: .leading)
-                    .lineLimit(1)
-                Spacer(minLength: 0)
-            } else {
-                Spacer(minLength: 0)
-            }
-        }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 8)
-        .frame(minHeight: 44)
-        .frame(maxWidth: .infinity)
-        .background(.ultraThinMaterial)
-    }
-
-    private var previewZoomToolbar: some View {
-        HStack(spacing: 6) {
-            Button {
-                previewZoomScale = max(previewZoomMin, previewZoomScale / 1.25)
-            } label: {
-                Image(systemName: "minus.magnifyingglass")
-                    .font(.system(size: 15))
-                    .frame(width: 28, height: 28)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.borderless)
-            .disabled(abs(previewZoomScale - previewZoomMin) < 0.000_1)
-            .help(String(localized: "preview.zoom.out"))
-
-            Text("\(Int((previewZoomScale * 100).rounded()))%")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(.secondary)
-                .frame(minWidth: 40, alignment: .center)
-
-            Button {
-                previewZoomScale = min(previewZoomMax, previewZoomScale * 1.25)
-            } label: {
-                Image(systemName: "plus.magnifyingglass")
-                    .font(.system(size: 15))
-                    .frame(width: 28, height: 28)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.borderless)
-            .disabled(abs(previewZoomScale - previewZoomMax) < 0.000_1)
-            .help(String(localized: "preview.zoom.in"))
-
-            Button {
-                previewZoomScale = 1.0
-            } label: {
-                Image(systemName: "arrow.counterclockwise")
-                    .font(.system(size: 15))
-                    .frame(width: 28, height: 28)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.borderless)
-            .disabled(abs(previewZoomScale - 1.0) < 0.000_1)
-            .help(String(localized: "preview.zoom.reset"))
-        }
-        .fixedSize()
     }
 
     private func starPicker(for photo: PhotoRecord) -> some View {
@@ -456,9 +734,9 @@ struct MainWorkspaceView: View {
         switch sidebarSelection {
         case .none:
             return photos
-        case .collection(let sid):
+        case .some(.collection(let sid)):
             return photos.filter { $0.collectionID == sid }
-        case .monthYear(let year, let month):
+        case .some(.monthYear(let year, let month)):
             let cal = Calendar.current
             return photos.filter {
                 let c = cal.dateComponents([.year, .month], from: $0.addedAt)
@@ -487,8 +765,8 @@ struct MainWorkspaceView: View {
                 collectionID: importDestinationCollectionID,
                 currentCount: photos.count
             )
-            if selectedPhotoID == nil {
-                selectedPhotoID = filteredPhotos.first?.id
+            if selectedPhotoID == nil, let first = filteredPhotos.first?.id {
+                persistedPhotoID = first.uuidString
             }
         } catch {
             photoImportFailureMessage = error.localizedDescription
@@ -535,6 +813,27 @@ struct MainWorkspaceView: View {
             photo.undoStackBlob = DevelopUndoStacks.emptyEncodedData
         }
         try? modelContext.save()
+    }
+}
+
+/// Style d’icône avec cadre fixe : évite le déplacement des boutons `.borderless` natifs sur macOS au pressed/hover.
+private struct WorkspaceChromeIconButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .background(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .fill(configuration.isPressed ? Color.primary.opacity(0.14) : Color.primary.opacity(0.07))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                    .strokeBorder(Color.primary.opacity(0.08), lineWidth: 1)
+            )
+    }
+}
+
+private extension Double {
+    func clamped(to range: ClosedRange<Double>) -> Double {
+        min(max(self, range.lowerBound), range.upperBound)
     }
 }
 
@@ -596,5 +895,6 @@ private struct CollaborationInviteSheet: View {
         }
         .padding(24)
         .frame(minWidth: 420)
+        .background(ZenithTheme.pageBackground)
     }
 }

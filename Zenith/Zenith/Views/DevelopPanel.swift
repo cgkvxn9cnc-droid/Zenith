@@ -9,7 +9,6 @@ import SwiftUI
 struct DevelopPanel: View {
     @Bindable var photo: PhotoRecord
     @Environment(\.modelContext) private var modelContext
-    @Binding var compareOriginal: Bool
 
     @State private var selectedSelectiveSwatch = 0
     @State private var colorBalanceMode = 0
@@ -21,15 +20,14 @@ struct DevelopPanel: View {
     ]
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            Text("develop.pixelmator.panel_title")
-                .font(.headline.weight(.semibold))
-                .padding(.horizontal, 14)
-                .padding(.bottom, 10)
+        developAdjustmentSections
+            .padding(.bottom, 8)
+    }
 
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    DevelopAdjustmentCard(
+    @ViewBuilder
+    private var developAdjustmentSections: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            DevelopAdjustmentCard(
                         titleKey: "develop.card.white_balance",
                         isOn: boolBinding(\.enableWhiteBalance)
                     ) {
@@ -222,6 +220,7 @@ struct DevelopPanel: View {
                         DevelopSliderRow(titleKey: "develop.remove.luma", value: binding(\.removeColorLumaRange), range: 0 ... 100)
                         DevelopSliderRow(titleKey: "develop.remove.intensity", value: binding(\.removeColorIntensity), range: 0 ... 100)
                     }
+                    .id("removeColorCard")
 
                     DevelopAdjustmentCard(
                         titleKey: "develop.card.black_white",
@@ -303,25 +302,13 @@ struct DevelopPanel: View {
                         DevelopSliderRow(titleKey: "develop.ca", value: binding(\.chromaticAberration), range: -100 ... 100)
                     }
 
-                    DevelopAdjustmentCard(
-                        titleKey: "develop.card.masks",
-                        isOn: boolBinding(\.enableMasks)
-                    ) {
-                        DevelopSliderRow(titleKey: "develop.mask_radial", value: binding(\.maskRadialBlend), range: -100 ... 100)
-                    }
-
-                    DevelopPanelFooter(compareOriginal: $compareOriginal) {
-                        photo.resetDevelopToNeutral()
-                        try? modelContext.save()
-                    }
-                }
-                .padding(.horizontal, 12)
-                .padding(.bottom, 20)
+            DevelopAdjustmentCard(
+                titleKey: "develop.card.masks",
+                isOn: boolBinding(\.enableMasks)
+            ) {
+                DevelopSliderRow(titleKey: "develop.mask_radial", value: binding(\.maskRadialBlend), range: -100 ... 100)
             }
-            .scrollIndicators(.automatic)
         }
-        .padding(.vertical, 10)
-        .background(Color.clear)
     }
 
     private func wheelColumn(

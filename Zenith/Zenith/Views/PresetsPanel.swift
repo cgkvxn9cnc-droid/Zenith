@@ -11,12 +11,17 @@ struct PresetsPanel: View {
     @Bindable var photo: PhotoRecord
     @Environment(\.modelContext) private var modelContext
 
+    /// Colonne gauche du mode développement : marges plus serrées.
+    var compact: Bool = false
+
     @State private var presetName = ""
 
+    private var horizontalPadding: CGFloat { compact ? 10 : 16 }
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: compact ? 8 : 12) {
             Text("preset.header")
-                .font(.headline)
+                .font(compact ? .subheadline.weight(.semibold) : .headline)
 
             HStack {
                 TextField("preset.name_placeholder", text: $presetName)
@@ -59,9 +64,9 @@ struct PresetsPanel: View {
                     }
                 }
             }
-            .frame(minHeight: 120)
+            .frame(minHeight: compact ? 100 : 120)
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 12)
+        .padding(.horizontal, horizontalPadding)
+        .padding(.bottom, compact ? 6 : 12)
     }
 }

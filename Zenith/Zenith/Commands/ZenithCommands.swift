@@ -15,6 +15,10 @@ struct ZenithCommands: Commands {
             }
             .keyboardShortcut("i", modifiers: [.command, .shift])
 
+            Button(String(localized: "menu.file.show_catalog")) {
+                NotificationCenter.default.post(name: .zenithShowCatalogOverview, object: nil)
+            }
+
             Divider()
 
             Button(String(localized: "menu.file.invite")) {

@@ -34,9 +34,7 @@ struct CollectionsSidebar: View {
                 }
                 .buttonStyle(.plain)
                 .help(String(localized: "sidebar.collections_help"))
-            }
 
-            Section("sidebar.section.catalog") {
                 ForEach(flattenedCollections) { row in
                     Label {
                         Text(row.name)
@@ -46,6 +44,8 @@ struct CollectionsSidebar: View {
                     .padding(.leading, CGFloat(row.depth * 14))
                     .tag(Optional.some(SidebarSelection.collection(row.id)))
                 }
+            } header: {
+                Text("sidebar.section.hierarchy.library")
             }
             Section("sidebar.section.by_date") {
                 ForEach(monthBuckets) { bucket in

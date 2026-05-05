@@ -6,8 +6,11 @@
 import SwiftUI
 
 enum ZenithTheme {
-    /// Gris moyen ~50 % pour le canevas principal.
-    static let canvasBackground = Color(red: 0.5, green: 0.5, blue: 0.52)
+    /// Gris moyen à ~50 % de luminance : fond des pages (aperçu, grille, fenêtres).
+    static let pageBackground = Color(white: 0.5)
+
+    /// Alias historique : même teinte que `pageBackground`.
+    static let canvasBackground = pageBackground
 
     static let glassStroke = Color.white.opacity(0.12)
 
@@ -16,10 +19,13 @@ enum ZenithTheme {
     /// Accent « réglages » type Pixelmator / captures de référence.
     static let adjustmentOrange = Color(red: 1.0, green: 0.48, blue: 0.12)
 
-    /// Fond des cartes du panneau de développement.
-    static let developCardFill = Color(red: 0.16, green: 0.16, blue: 0.17)
+    /// Curseurs au-dessus des dégradés : lisible sans masquer la piste colorée.
+    static let sliderThumbNeutral = Color(white: 0.88)
 
-    static let developPanelBackground = Color(red: 0.09, green: 0.09, blue: 0.1)
+    /// Fond des cartes du panneau de développement (légèrement sous le gris page).
+    static let developCardFill = Color(white: 0.46)
+
+    static let developPanelBackground = pageBackground
 
     /// Barre latérale gauche : coins arrondis côté contenu (bord intérieur).
     static var sidebarGlassShapeLeading: UnevenRoundedRectangle {
@@ -43,7 +49,12 @@ enum ZenithTheme {
         )
     }
 
-    /// Verre « liquid » pour les colonnes latérales (effet plus lisible sur le canevas).
+    /// Barre chrome supérieure : coins arrondis (flotte sous la zone titre).
+    static var topChromeGlassShape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+    }
+
+    /// Verre « liquid » pour les colonnes latérales et la barre chrome (effet plus lisible sur le canevas).
     @ViewBuilder
     static func liquidSidebarGlass<S: Shape>(_ shape: S) -> some View {
         if #available(macOS 26.0, *) {

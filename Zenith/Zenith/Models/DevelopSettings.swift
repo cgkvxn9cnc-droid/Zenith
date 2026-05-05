@@ -52,6 +52,20 @@ struct DevelopSettings: Equatable, Sendable {
     var chromaticAberration: Double
     var maskRadialBlend: Double
 
+    /// Recadrage relatif (0…~0,49 par bord) ; tous à 0 = image entière.
+    var cropLeft: Double
+    var cropTop: Double
+    var cropRight: Double
+    var cropBottom: Double
+
+    /// Proportion de recadrage sélectionnée dans la barre d’outils (`DevelopCropAspectPreset.rawValue`).
+    var cropAspectPresetRaw: String
+
+    /// Retouche locale : centre normalisé ; désactivé si `healNormX` est négatif ou `healRadiusPx` ≤ 0.
+    var healNormX: Double
+    var healNormY: Double
+    var healRadiusPx: Double
+
     // MARK: Activation par carte (style Pixelmator)
 
     var enableWhiteBalance: Bool
@@ -156,6 +170,14 @@ struct DevelopSettings: Equatable, Sendable {
         lensCorrection: 0,
         chromaticAberration: 0,
         maskRadialBlend: 0,
+        cropLeft: 0,
+        cropTop: 0,
+        cropRight: 0,
+        cropBottom: 0,
+        cropAspectPresetRaw: DevelopCropAspectPreset.free.rawValue,
+        healNormX: -1,
+        healNormY: -1,
+        healRadiusPx: 0,
         enableWhiteBalance: true,
         enableBasicAdjustments: true,
         enableHueSaturation: true,
@@ -262,6 +284,9 @@ extension DevelopSettings: Codable {
         case highlights, shadows, temperature, tint
         case tslHue, tslSaturation, tslLuminance
         case clarity, texture, lensCorrection, chromaticAberration, maskRadialBlend
+        case cropLeft, cropTop, cropRight, cropBottom
+        case cropAspectPresetRaw
+        case healNormX, healNormY, healRadiusPx
         case enableWhiteBalance, enableBasicAdjustments, enableHueSaturation, enableDetailAdjustments
         case enableSelectiveClarity, enableSelectiveColor, enableColorBalance, enableLevels
         case enableCurves, enableRemoveColor, enableBlackWhite, enableLUT
@@ -299,6 +324,15 @@ extension DevelopSettings: Codable {
         base.lensCorrection = try c.decodeIfPresent(Double.self, forKey: .lensCorrection) ?? 0
         base.chromaticAberration = try c.decodeIfPresent(Double.self, forKey: .chromaticAberration) ?? 0
         base.maskRadialBlend = try c.decodeIfPresent(Double.self, forKey: .maskRadialBlend) ?? 0
+
+        base.cropLeft = try c.decodeIfPresent(Double.self, forKey: .cropLeft) ?? 0
+        base.cropTop = try c.decodeIfPresent(Double.self, forKey: .cropTop) ?? 0
+        base.cropRight = try c.decodeIfPresent(Double.self, forKey: .cropRight) ?? 0
+        base.cropBottom = try c.decodeIfPresent(Double.self, forKey: .cropBottom) ?? 0
+        base.cropAspectPresetRaw = try c.decodeIfPresent(String.self, forKey: .cropAspectPresetRaw) ?? DevelopCropAspectPreset.free.rawValue
+        base.healNormX = try c.decodeIfPresent(Double.self, forKey: .healNormX) ?? -1
+        base.healNormY = try c.decodeIfPresent(Double.self, forKey: .healNormY) ?? -1
+        base.healRadiusPx = try c.decodeIfPresent(Double.self, forKey: .healRadiusPx) ?? 0
 
         base.enableWhiteBalance = try c.decodeIfPresent(Bool.self, forKey: .enableWhiteBalance) ?? true
         base.enableBasicAdjustments = try c.decodeIfPresent(Bool.self, forKey: .enableBasicAdjustments) ?? true
@@ -380,6 +414,14 @@ extension DevelopSettings: Codable {
         try c.encode(lensCorrection, forKey: .lensCorrection)
         try c.encode(chromaticAberration, forKey: .chromaticAberration)
         try c.encode(maskRadialBlend, forKey: .maskRadialBlend)
+        try c.encode(cropLeft, forKey: .cropLeft)
+        try c.encode(cropTop, forKey: .cropTop)
+        try c.encode(cropRight, forKey: .cropRight)
+        try c.encode(cropBottom, forKey: .cropBottom)
+        try c.encode(cropAspectPresetRaw, forKey: .cropAspectPresetRaw)
+        try c.encode(healNormX, forKey: .healNormX)
+        try c.encode(healNormY, forKey: .healNormY)
+        try c.encode(healRadiusPx, forKey: .healRadiusPx)
         try c.encode(enableWhiteBalance, forKey: .enableWhiteBalance)
         try c.encode(enableBasicAdjustments, forKey: .enableBasicAdjustments)
         try c.encode(enableHueSaturation, forKey: .enableHueSaturation)

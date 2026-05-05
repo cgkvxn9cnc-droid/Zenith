@@ -19,6 +19,7 @@ enum DevelopPreviewRenderer {
             let s = previewMaxDimension / maxDim
             output = output.transformed(by: CGAffineTransform(scaleX: s, y: s))
         }
+        output = applyCropIfNeeded(output, settings: settings)
         let workExtent = output.extent
 
         // 1 — Noir & blanc
@@ -131,8 +132,48 @@ enum DevelopPreviewRenderer {
             output = applyCombinedVignette(output, settings: settings)
         }
 
+        output = applyHealSpotIfNeeded(output, settings: settings)
         output = output.cropped(to: workExtent)
         return output
+    }
+
+    /// Recadrage par fractions de bord (avant les réglages).
+    private static func applyCropIfNeeded(_ input: CIImage, settings: DevelopSettings) -> CIImage {
+        let l = max(0, min(0.48, settings.cropLeft))
+        let t = max(0, min(0.48, settings.cropTop))
+        let r = max(0, min(0.48, settings.cropRight))
+        let b = max(0, min(0.48, settings.cropBottom))
+        guard l + r < 0.999, t + b < 0.999 else { return input }
+        let e = input.extent
+        let w = e.width * (1 - l - r)
+        let h = e.height * (1 - t - b)
+        guard w > 2, h > 2 else { return input }
+        let x = e.minX + e.width * l
+        let y = e.minY + e.height * t
+        return input.cropped(to: CGRect(x: x, y: y, width: w, height: h))
+    }
+
+    /// Flou local (retouche type « pansement ») sur une zone circulaire.
+    private static func applyHealSpotIfNeeded(_ input: CIImage, settings: DevelopSettings) -> CIImage {
+        guard settings.healRadiusPx > 0.5,
+              settings.healNormX >= 0, settings.healNormY >= 0,
+              settings.healNormX <= 1, settings.healNormY <= 1 else { return input }
+        let e = input.extent
+        let cx = e.minX + CGFloat(settings.healNormX) * e.width
+        // Repère SwiftUI (Y depuis le haut) → Core Image (origine en bas à gauche).
+        let cy = e.maxY - CGFloat(settings.healNormY) * e.height
+        let R = min(min(e.width, e.height) * 0.48, max(6, CGFloat(settings.healRadiusPx)))
+        let rect = CGRect(x: cx - R, y: cy - R, width: R * 2, height: R * 2).intersection(e)
+        guard rect.width > 3, rect.height > 3 else { return input }
+        let patchIn = input.cropped(to: rect)
+        guard let blur = CIFilter(name: "CIGaussianBlur") else { return input }
+        blur.setValue(patchIn, forKey: kCIInputImageKey)
+        blur.setValue(min(14, max(1, R / 5)), forKey: kCIInputRadiusKey)
+        guard let blurredPatch = blur.outputImage?.cropped(to: rect) else { return input }
+        guard let over = CIFilter(name: "CISourceOverCompositing") else { return input }
+        over.setValue(blurredPatch, forKey: kCIInputImageKey)
+        over.setValue(input, forKey: kCIInputBackgroundImageKey)
+        return over.outputImage ?? input
     }
 
     static func render(url: URL, settings: DevelopSettings) -> NSImage? {

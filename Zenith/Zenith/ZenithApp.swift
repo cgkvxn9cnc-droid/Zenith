@@ -10,6 +10,8 @@ import SwiftUI
 
 @main
 struct ZenithApp: App {
+    @NSApplicationDelegateAdaptor(ZenithAppDelegate.self) private var appDelegate
+
     var sharedModelContainer: ModelContainer = {
         let schema = Schema([
             CollectionRecord.self,
@@ -30,6 +32,8 @@ struct ZenithApp: App {
         WindowGroup {
             ContentView()
         }
+        /// Barre de titre intégrée : le contenu remonte sous la zone des boutons ; **ne pas** utiliser `.plain` (supprime le chrome système y compris fermer / réduire / zoom).
+        .windowStyle(.hiddenTitleBar)
         .modelContainer(sharedModelContainer)
         .commands {
             ZenithCommands()
