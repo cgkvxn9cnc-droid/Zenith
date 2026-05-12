@@ -32,14 +32,10 @@ struct PhotoHistogramView: View {
         .padding(.bottom, 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(Text("workspace.histogram.title"))
+        /// `histogramRefreshToken` inclut déjà `developBlob` : un `onChange` supplémentaire doublait le travail
+        /// à chaque pixel de curseur et saturait le CPU.
         .task(id: histogramRefreshToken) {
             await computeHistogram()
-        }
-        .onChange(of: photo?.developBlob) { _, _ in
-            Task { await computeHistogram() }
-        }
-        .onChange(of: photo?.id) { _, _ in
-            Task { await computeHistogram() }
         }
     }
 
@@ -130,6 +126,16 @@ struct PhotoHistogramView: View {
             exifLine = nil
             return
         }
+        let settings = photo.developSettings
+        if settings != .neutral {
+            /// Regroupe les rafales de curseur : le `.task(id:)` annule la tâche précédente, mais on évite quand
+            /// même de lancer un pipeline complet à 60 Hz pendant le glissé.
+            do {
+                try await Task.sleep(for: .milliseconds(90))
+            } catch {
+                return
+            }
+        }
         let url: URL
         do {
             url = try photo.resolvedURL()
@@ -138,13 +144,17 @@ struct PhotoHistogramView: View {
             exifLine = nil
             return
         }
-        let settings = photo.developSettings
-        let ciAndExif = await Task.detached(priority: .userInitiated) {
+        let ciAndExif = await Task.detached(priority: .utility) {
             let started = url.startAccessingSecurityScopedResource()
             defer {
                 if started { url.stopAccessingSecurityScopedResource() }
             }
-            let ci = DevelopPreviewRenderer.developedCIImage(url: url, settings: settings)
+            let ci = DevelopPreviewRenderer.developedCIImage(
+                url: url,
+                settings: settings,
+                quality: .fast,
+                maxSourceDecodeDimension: 640
+            )
             let exif = PhotoEXIFFormatter.line(from: url)
             return (ci, exif)
         }.value

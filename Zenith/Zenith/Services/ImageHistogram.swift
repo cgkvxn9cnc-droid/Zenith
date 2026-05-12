@@ -20,7 +20,7 @@ struct RGBLHistogramData: Sendable {
     }()
 }
 
-enum ImageHistogram {
+nonisolated enum ImageHistogram {
     private static let readContext = CIContext(options: [.useSoftwareRenderer: false])
 
     /// Bins 0…255 normalisés (max = 1) pour la luminance perceptuelle.
@@ -38,13 +38,10 @@ enum ImageHistogram {
             let s = maxSampleSide / m
             img = img.transformed(by: CGAffineTransform(scaleX: s, y: s))
         }
-        let extent = img.extent
-        let integral = CGRect(
-            x: floor(extent.origin.x),
-            y: floor(extent.origin.y),
-            width: max(1, ceil(extent.width)),
-            height: max(1, ceil(extent.height))
-        )
+        guard let integral = DevelopPreviewRenderer.integralRectForRasterization(img.extent) else {
+            let z = Array(repeating: Float(0), count: 256)
+            return RGBLHistogramData(red: z, green: z, blue: z, luminance: z, showsShadowClipping: false, showsHighlightClipping: false)
+        }
         guard integral.width.isFinite, integral.height.isFinite,
               let cg = readContext.createCGImage(img, from: integral) else {
             let z = Array(repeating: Float(0), count: 256)

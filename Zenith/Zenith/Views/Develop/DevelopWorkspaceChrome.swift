@@ -4,6 +4,7 @@
 //
 
 import AppKit
+import CoreImage
 import SwiftData
 import SwiftUI
 
@@ -46,12 +47,38 @@ struct DevelopNavigatorThumb: View {
     private func loadThumb() async {
         do {
             let url = try photo.resolvedURL()
-            let started = url.startAccessingSecurityScopedResource()
-            defer { if started { url.stopAccessingSecurityScopedResource() } }
-            let img = ThumbnailLoader.thumbnail(for: url, maxPixel: side * 2)
-            await MainActor.run { thumb = img }
+            let target = side * 2
+            /// Le décodage RAW peut prendre plusieurs centaines de ms ; on le sort impérativement du
+            /// MainActor pour éviter de bloquer le commit de la fenêtre au tout premier rendu (au
+            /// démarrage, plusieurs cellules de la pellicule + ce thumb peuvent être instanciés
+            /// simultanément). Le throttle global protège `RawCamera-Provider-Render-Queue` des
+            /// accès concurrents qui mènent à un deadlock.
+            let detached = Task.detached(priority: .userInitiated) { () -> ThumbnailDecodeResult in
+                if Task.isCancelled { return ThumbnailDecodeResult(nil) }
+                do {
+                    try await ThumbnailDecodeThrottle.shared.acquire()
+                } catch {
+                    return ThumbnailDecodeResult(nil)
+                }
+                if Task.isCancelled {
+                    await ThumbnailDecodeThrottle.shared.release()
+                    return ThumbnailDecodeResult(nil)
+                }
+                let started = url.startAccessingSecurityScopedResource()
+                let img = ThumbnailLoader.thumbnail(for: url, maxPixel: target)
+                if started { url.stopAccessingSecurityScopedResource() }
+                await ThumbnailDecodeThrottle.shared.release()
+                return ThumbnailDecodeResult(img)
+            }
+            let result: ThumbnailDecodeResult = await withTaskCancellationHandler {
+                await detached.value
+            } onCancel: {
+                detached.cancel()
+            }
+            if Task.isCancelled { return }
+            self.thumb = result.image
         } catch {
-            await MainActor.run { thumb = nil }
+            self.thumb = nil
         }
     }
 }
@@ -61,6 +88,9 @@ struct DevelopToolStrip: View {
     @Bindable var photo: PhotoRecord
     @Binding var activeTool: DevelopCanvasTool
     @Environment(\.modelContext) private var modelContext
+
+    @State private var commandKeyHeld = false
+    @State private var horizonBusy = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -104,6 +134,11 @@ struct DevelopToolStrip: View {
         }
         .padding(.horizontal, 10)
         .padding(.vertical, 6)
+        .background(alignment: .topLeading) {
+            CommandKeyHeldMonitor(isHeld: $commandKeyHeld)
+                .frame(width: 1, height: 1)
+                .allowsHitTesting(false)
+        }
     }
 
     private var cropControls: some View {
@@ -116,25 +151,135 @@ struct DevelopToolStrip: View {
             .pickerStyle(.menu)
             .controlSize(.small)
 
+            straightenSlider
+
+            cropFlipRow
+
             Text("develop.crop.drag_hint")
                 .font(.caption2)
                 .foregroundStyle(.tertiary)
                 .fixedSize(horizontal: false, vertical: true)
 
-            Button("develop.crop.reset") {
+            Text("develop.crop.cmd_reset_hint")
+                .font(.caption2)
+                .foregroundStyle(.tertiary.opacity(0.85))
+                .fixedSize(horizontal: false, vertical: true)
+
+            if commandKeyHeld {
+                Button(String(localized: "develop.crop.reset")) {
+                    resetCropFramingOnly()
+                }
+                .font(.caption)
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
+        }
+    }
+
+    private var cropFlipRow: some View {
+        HStack(spacing: 8) {
+            Toggle(isOn: flipHorizontalBinding) {
+                Image(systemName: "arrow.left.and.right")
+            }
+            .toggleStyle(.button)
+            .help(Text("develop.crop.flip_horizontal"))
+
+            Toggle(isOn: flipVerticalBinding) {
+                Image(systemName: "arrow.up.and.down")
+            }
+            .toggleStyle(.button)
+            .help(Text("develop.crop.flip_vertical"))
+
+            Button {
+                Task { await runAutoHorizon() }
+            } label: {
+                Image(systemName: "level")
+            }
+            .buttonStyle(.bordered)
+            .disabled(horizonBusy || photo.pixelWidth < 4)
+            .help(Text("develop.crop.auto_horizon"))
+        }
+        .controlSize(.small)
+    }
+
+    private var flipHorizontalBinding: Binding<Bool> {
+        Binding(
+            get: { photo.developSettings.cropFlipHorizontal },
+            set: { newValue in
                 var s = photo.developSettings
-                s.cropLeft = 0
-                s.cropTop = 0
-                s.cropRight = 0
-                s.cropBottom = 0
-                s.cropAspectPresetRaw = DevelopCropAspectPreset.free.rawValue
+                s.cropFlipHorizontal = newValue
                 photo.applyDevelopSettings(s)
                 try? modelContext.save()
             }
-            .font(.caption)
-            .buttonStyle(.bordered)
+        )
+    }
+
+    private var flipVerticalBinding: Binding<Bool> {
+        Binding(
+            get: { photo.developSettings.cropFlipVertical },
+            set: { newValue in
+                var s = photo.developSettings
+                s.cropFlipVertical = newValue
+                photo.applyDevelopSettings(s)
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private func runAutoHorizon() async {
+        guard !horizonBusy else { return }
+        horizonBusy = true
+        defer { horizonBusy = false }
+        guard let url = try? photo.resolvedURL() else { return }
+        let began = url.startAccessingSecurityScopedResource()
+        defer { if began { url.stopAccessingSecurityScopedResource() } }
+        guard let ci = ZenithImageSourceLoader.ciImage(
+            contentsOf: url,
+            maxPixelDimension: 2048,
+            draftMode: true
+        ) else { return }
+        guard let deg = await HorizonStraightenService.estimateStraightenDegrees(ciImage: ci) else { return }
+        var s = photo.developSettings
+        s.straightenAngle = deg
+        photo.applyDevelopSettings(s)
+        try? modelContext.save()
+    }
+
+    private var straightenSlider: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text("develop.crop.straighten")
+                    .font(.caption2.weight(.medium))
+                    .foregroundStyle(.secondary)
+                Spacer()
+                Text(String(format: "%.1f°", photo.developSettings.straightenAngle))
+                    .font(.caption2.monospacedDigit())
+                    .foregroundStyle(.tertiary)
+            }
+            Slider(value: straightenAngleBinding, in: -45...45, step: 0.1) {
+                EmptyView()
+            }
             .controlSize(.small)
         }
+    }
+
+    private var straightenAngleBinding: Binding<Double> {
+        Binding(
+            get: { photo.developSettings.straightenAngle },
+            set: { newValue in
+                var s = photo.developSettings
+                s.straightenAngle = newValue
+                photo.applyDevelopSettings(s)
+                try? modelContext.save()
+            }
+        )
+    }
+
+    private func resetCropFramingOnly() {
+        var s = photo.developSettings
+        s.resetCropToFullFrame()
+        photo.applyDevelopSettings(s)
+        try? modelContext.save()
     }
 
     private var aspectPresetBinding: Binding<DevelopCropAspectPreset> {
@@ -148,7 +293,16 @@ struct DevelopToolStrip: View {
                 let natural = iw / ih
                 let ratio = newPreset.widthOverHeight(imageNaturalRatio: natural)
                 if newPreset != .free {
-                    let r = DevelopCropGeometry.maxCenteredRect(imageWidth: iw, imageHeight: ih, widthOverHeight: ratio)
+                    let canvas = DevelopCropGeometry.rotatedCanvasPixelSize(
+                        imageWidth: iw,
+                        imageHeight: ih,
+                        angleDegrees: s.straightenAngle
+                    )
+                    let r = DevelopCropGeometry.maxCenteredRect(
+                        imageWidth: canvas.width,
+                        imageHeight: canvas.height,
+                        widthOverHeight: ratio
+                    )
                     DevelopCropGeometry.applyPixelCrop(r, imageWidth: iw, imageHeight: ih, to: &s)
                 }
                 photo.applyDevelopSettings(s)
@@ -181,11 +335,7 @@ struct DevelopToolStrip: View {
     }
 
     private func activateSmartRemove() {
-        var s = photo.developSettings
-        s.enableRemoveColor = true
-        photo.applyDevelopSettings(s)
-        try? modelContext.save()
         activeTool = .none
-        NotificationCenter.default.post(name: .zenithScrollToRemoveColor, object: nil)
+        NotificationCenter.default.post(name: .zenithScrollDevelopGrainNoise, object: nil)
     }
 }

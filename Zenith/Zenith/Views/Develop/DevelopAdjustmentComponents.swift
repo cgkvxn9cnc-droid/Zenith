@@ -3,44 +3,77 @@
 //  Zenith
 //
 
+import AppKit
 import SwiftUI
+
+/// Identité des sections pour l’accordéon du panneau Développement (jusqu’à trois sections ouvertes à la fois).
+enum DevelopAdjustmentAccordionSection: Hashable {
+    /// Groupe 1 — Basiques (balance des blancs, tons, teinte / saturation).
+    case basics
+    case tslPerColor
+    case colorBalance
+    case curves
+    case blackWhite
+    case sharpness
+    /// Groupe 7 — Grain et réduction de bruit (une carte).
+    case grainAndNoise
+}
 
 // MARK: - Carte type Pixelmator
 
 struct DevelopAdjustmentCard<Content: View>: View {
+    let accordionID: DevelopAdjustmentAccordionSection
+    @Binding var expandedSectionIDs: [DevelopAdjustmentAccordionSection]
+    @Binding var hoveredGroupResetSection: DevelopAdjustmentAccordionSection?
     let titleKey: LocalizedStringKey
-    @Binding var isOn: Bool
-    var showMagicWand: Bool = false
-    var magicWandAction: (() -> Void)?
     @ViewBuilder var content: () -> Content
+
+    private var isExpanded: Bool { expandedSectionIDs.contains(accordionID) }
+
+    private func toggleExpanded() {
+        var arr = expandedSectionIDs
+        if let idx = arr.firstIndex(of: accordionID) {
+            arr.remove(at: idx)
+        } else {
+            arr.append(accordionID)
+            while arr.count > 3 {
+                arr.removeFirst()
+            }
+        }
+        expandedSectionIDs = arr
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .center, spacing: 8) {
-                Text(titleKey)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
-                Spacer(minLength: 8)
-                if showMagicWand {
-                    Button {
-                        magicWandAction?()
-                    } label: {
-                        Image(systemName: "wand.and.rays")
-                            .font(.body.weight(.medium))
-                            .foregroundStyle(ZenithTheme.adjustmentOrange.opacity(isOn ? 1 : 0.35))
+                Button {
+                    withAnimation(.snappy(duration: 0.2)) {
+                        toggleExpanded()
                     }
-                    .buttonStyle(.plain)
-                    .disabled(!isOn)
-                    .help(String(localized: "develop.auto_adjust_hint"))
+                } label: {
+                    HStack(spacing: 6) {
+                        Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                            .frame(width: 14)
+                        Text(titleKey)
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.primary)
+                    }
+                    .contentShape(Rectangle())
                 }
-                Toggle("", isOn: $isOn)
-                    .labelsHidden()
-                    .toggleStyle(.switch)
-                    .tint(ZenithTheme.adjustmentOrange)
-                    .controlSize(.small)
+                .buttonStyle(.plain)
+                .onHover { hovering in
+                    if hovering {
+                        hoveredGroupResetSection = accordionID
+                    } else if hoveredGroupResetSection == accordionID {
+                        hoveredGroupResetSection = nil
+                    }
+                }
+                Spacer(minLength: 8)
             }
 
-            if isOn {
+            if isExpanded {
                 content()
             }
         }
@@ -63,31 +96,48 @@ struct DevelopSliderRow: View {
     @Binding var value: Double
     var range: ClosedRange<Double>
     var displayPercent: Bool = true
-    var accent: Color = ZenithTheme.sliderThumbNeutral
+    var accent: Color = ZenithTheme.adjustmentOrange
+    var defaultValue: Double = 0
+    /// Affiche « Réinitialiser » à côté du titre tant que ⌘ est maintenu.
+    var commandKeyShowsReset: Bool = false
+    var onReset: (() -> Void)? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
+            HStack(alignment: .firstTextBaseline) {
                 Text(titleKey)
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Spacer()
-                Text(formattedValue)
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                Spacer(minLength: 6)
+                if commandKeyShowsReset, let onReset {
+                    Button(String(localized: "develop.footer.reset")) {
+                        onReset()
+                    }
+                    .font(.caption2.weight(.semibold))
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(ZenithTheme.adjustmentOrange)
+                    .fixedSize()
+                }
+                HStack(spacing: 2) {
+                    DevelopNumericValueControl(value: $value, range: range, displayPercent: displayPercent)
+                    if displayPercent {
+                        Text("%")
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             Slider(value: $value, in: range)
                 .tint(accent)
                 .controlSize(.small)
+                .simultaneousGesture(
+                    TapGesture(count: 2).onEnded {
+                        let clamped = min(max(defaultValue, range.lowerBound), range.upperBound)
+                        value = clamped
+                    }
+                )
         }
         .accessibilityElement(children: .combine)
-    }
-
-    private var formattedValue: String {
-        if displayPercent {
-            return String(format: "%.0f %%", value)
-        }
-        return String(format: "%.1f", value)
     }
 }
 
@@ -99,17 +149,34 @@ struct DevelopGradientSliderRow: View {
     var range: ClosedRange<Double>
     var gradientColors: [Color]
     var displayPercent: Bool = true
+    var defaultValue: Double = 0
+    var commandKeyShowsReset: Bool = false
+    var onReset: (() -> Void)? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            HStack {
+            HStack(alignment: .firstTextBaseline) {
                 Text(titleKey)
                     .font(.caption)
                     .foregroundStyle(.secondary)
-                Spacer()
-                Text(displayPercent ? String(format: "%.0f %%", value) : String(format: "%.1f", value))
-                    .font(.caption.monospacedDigit())
-                    .foregroundStyle(.secondary)
+                Spacer(minLength: 6)
+                if commandKeyShowsReset, let onReset {
+                    Button(String(localized: "develop.footer.reset")) {
+                        onReset()
+                    }
+                    .font(.caption2.weight(.semibold))
+                    .buttonStyle(.borderless)
+                    .foregroundStyle(ZenithTheme.adjustmentOrange)
+                    .fixedSize()
+                }
+                HStack(spacing: 2) {
+                    DevelopNumericValueControl(value: $value, range: range, displayPercent: displayPercent)
+                    if displayPercent {
+                        Text("%")
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(.secondary)
+                    }
+                }
             }
             ZStack(alignment: .leading) {
                 Capsule()
@@ -123,8 +190,14 @@ struct DevelopGradientSliderRow: View {
                     .frame(height: 5)
                     .opacity(0.85)
                 Slider(value: $value, in: range)
-                    .tint(ZenithTheme.sliderThumbNeutral)
+                    .tint(.clear)
                     .controlSize(.small)
+                    .simultaneousGesture(
+                        TapGesture(count: 2).onEnded {
+                            let clamped = min(max(defaultValue, range.lowerBound), range.upperBound)
+                            value = clamped
+                        }
+                    )
             }
             .frame(height: 18)
         }
@@ -151,44 +224,13 @@ struct DevelopHistogramPlaceholder: View {
     }
 }
 
-// MARK: - Courbe maître (aperçu visuel)
-
-struct DevelopCurvesPreview: View {
-    var intensity: Double
-
-    var body: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            let h = geo.size.height
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color.black.opacity(0.35))
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: h))
-                    path.addLine(to: CGPoint(x: w, y: 0))
-                }
-                .stroke(Color.white.opacity(0.35), lineWidth: 1)
-
-                let bend = intensity / 100.0 * 0.25
-                Path { path in
-                    path.move(to: CGPoint(x: 0, y: h))
-                    path.addQuadCurve(
-                        to: CGPoint(x: w, y: 0),
-                        control: CGPoint(x: w * (0.5 + bend), y: h * (0.5 - bend))
-                    )
-                }
-                .stroke(Color.white.opacity(0.75), lineWidth: 2)
-            }
-        }
-        .frame(height: 120)
-    }
-}
-
 // MARK: - Mini disque teinte / saturation (−100…100 teinte, 0…100 saturation)
 
 struct DevelopColorWheelPair: View {
     @Binding var hue: Double
     @Binding var saturation: Double
+    var defaultHue: Double = 0
+    var defaultSaturation: Double = 0
 
     private let size: CGFloat = 104
 
@@ -212,6 +254,13 @@ struct DevelopColorWheelPair: View {
                 .offset(offsetForKnob)
         }
         .frame(width: size, height: size)
+        .contentShape(Circle())
+        .highPriorityGesture(
+            TapGesture(count: 2).onEnded {
+                hue = defaultHue
+                saturation = defaultSaturation
+            }
+        )
         .gesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { g in
@@ -233,33 +282,69 @@ struct DevelopColorWheelPair: View {
     }
 }
 
-// MARK: - Pied de panneau Avant/Après + Réinitialiser
+// MARK: - Pied de panneau Avant / Après + tout réinitialiser
 
 struct DevelopPanelFooter: View {
     @Binding var compareOriginal: Bool
-    var onReset: () -> Void
+    var onResetAll: () -> Void
 
     var body: some View {
-        HStack(spacing: 10) {
-            Button {
-                compareOriginal.toggle()
-            } label: {
-                Image(systemName: "square.split.1x2")
-                    .font(.body.weight(.medium))
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
+        HStack(alignment: .center, spacing: 10) {
+            Label(String(localized: "develop.footer.compare"), systemImage: "square.split.2x1")
+                .font(.callout.weight(.medium))
+                .foregroundStyle(compareOriginal ? ZenithTheme.adjustmentOrange : Color.primary)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 11)
+                .padding(.horizontal, 10)
+                .background {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .fill(Color(nsColor: .controlBackgroundColor))
+                }
+                .overlay {
+                    RoundedRectangle(cornerRadius: 6, style: .continuous)
+                        .strokeBorder(Color.primary.opacity(compareOriginal ? 0.38 : 0.2), lineWidth: 1)
+                }
+                .contentShape(Rectangle())
+                .simultaneousGesture(
+                    DragGesture(minimumDistance: 0)
+                        .onChanged { _ in
+                            compareOriginal = true
+                        }
+                        .onEnded { _ in
+                            compareOriginal = false
+                        }
+                )
+                .help(String(localized: "develop.footer.compare_hint"))
+                .accessibilityLabel(Text("develop.footer.compare"))
+                .accessibilityHint(Text("develop.footer.compare_hint"))
+
+            Button(action: onResetAll) {
+                Label(String(localized: "develop.footer.reset_all"), systemImage: "arrow.counterclockwise.circle")
+                    .font(.callout.weight(.medium))
             }
             .buttonStyle(.bordered)
-            .tint(compareOriginal ? ZenithTheme.adjustmentOrange : .secondary)
-            .help(String(localized: "develop.footer.compare_hint"))
-
-            Button(String(localized: "develop.footer.reset")) {
-                onReset()
-            }
-            .buttonStyle(.borderedProminent)
-            .tint(ZenithTheme.adjustmentOrange)
-            .frame(maxWidth: .infinity)
+            .controlSize(.large)
+            .help(String(localized: "develop.footer.reset_all_hint"))
+            .accessibilityLabel(Text("develop.footer.reset_all"))
         }
         .padding(.top, 8)
+        .onDisappear {
+            compareOriginal = false
+        }
+    }
+}
+
+// MARK: - Suivi du curseur pour ⌘ = sur l’outil survolé
+
+extension View {
+    /// Associe la vue au nom d’outil pour la réinitialisation au clavier (voir `DevelopPanel`).
+    func developResetHoverTracking(id: String, hoveredId: Binding<String?>) -> some View {
+        onHover { inside in
+            if inside {
+                hoveredId.wrappedValue = id
+            } else if hoveredId.wrappedValue == id {
+                hoveredId.wrappedValue = nil
+            }
+        }
     }
 }

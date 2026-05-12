@@ -9,15 +9,28 @@ struct ZenithCommands: Commands {
     @AppStorage("zenith.collaborationEnabled") private var collaborationEnabled = false
 
     var body: some Commands {
+        CommandGroup(replacing: .appSettings) {
+            EmptyView()
+        }
+
         CommandGroup(after: .newItem) {
             Button(String(localized: "menu.file.import")) {
                 NotificationCenter.default.post(name: .zenithImportPhotos, object: nil)
             }
             .keyboardShortcut("i", modifiers: [.command, .shift])
 
+            Button(String(localized: "menu.file.import_lightroom")) {
+                NotificationCenter.default.post(name: .zenithImportLightroomCatalog, object: nil)
+            }
+
             Button(String(localized: "menu.file.show_catalog")) {
                 NotificationCenter.default.post(name: .zenithShowCatalogOverview, object: nil)
             }
+
+            SettingsLink {
+                Text("menu.file.settings")
+            }
+            .keyboardShortcut(",", modifiers: .command)
 
             Divider()
 

@@ -5,10 +5,14 @@
 
 import Foundation
 
-/// Modes visibles en permanence : bibliothèque (grille) et développement (le catalogue est dans le menu Fichier).
-enum WorkspaceHierarchyMode: String, CaseIterable, Identifiable {
+/// Les trois zones de travail : catalogue (vue d'ensemble), bibliothèque (tri/grille) et développement (retouche).
+enum WorkspaceTab: String, CaseIterable, Identifiable {
+    case catalog
     case library
     case develop
 
     var id: String { rawValue }
 }
+
+/// Alias rétro-compatible — à supprimer une fois toutes les références migrées.
+typealias WorkspaceHierarchyMode = WorkspaceTab

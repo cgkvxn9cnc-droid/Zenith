@@ -6,7 +6,7 @@
 import Foundation
 
 /// Historique non destructif local (undo / redo) des réglages de développement.
-struct DevelopUndoStacks: Codable, Equatable {
+nonisolated struct DevelopUndoStacks: Codable, Equatable {
     var past: [Data]
     var future: [Data]
 

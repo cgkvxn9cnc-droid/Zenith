@@ -7,7 +7,7 @@ import Foundation
 
 // MARK: - Couleur sélective (8 teintes type référence Pixelmator)
 
-struct SelectiveColorChannel: Codable, Equatable, Sendable {
+nonisolated struct SelectiveColorChannel: Codable, Equatable, Sendable {
     var hue: Double
     var saturation: Double
     var luminance: Double
@@ -15,7 +15,7 @@ struct SelectiveColorChannel: Codable, Equatable, Sendable {
     static let neutral = SelectiveColorChannel(hue: 0, saturation: 0, luminance: 0)
 }
 
-struct SelectiveColorPalette: Codable, Equatable, Sendable {
+nonisolated struct SelectiveColorPalette: Codable, Equatable, Sendable {
     var channels: [SelectiveColorChannel]
 
     static let neutral = SelectiveColorPalette(channels: Array(repeating: .neutral, count: 8))
@@ -31,7 +31,7 @@ struct SelectiveColorPalette: Codable, Equatable, Sendable {
 
 /// Réglages de développement non destructifs (sérialisés dans `PhotoRecord`).
 /// Structure inspirée des panneaux « Réglages des couleurs » type Pixelmator Pro.
-struct DevelopSettings: Equatable, Sendable {
+nonisolated struct DevelopSettings: Equatable, Sendable {
     // MARK: Réglages de base (existants)
 
     var brightness: Double
@@ -58,8 +58,19 @@ struct DevelopSettings: Equatable, Sendable {
     var cropRight: Double
     var cropBottom: Double
 
+    /// Rectangle normalisé (origine **bas‑gauche**, comme Core Image) dans la toile après rotation / retournements : indépendant de la résolution d’export.
+    var cropNormalizedOriginX: Double
+    var cropNormalizedOriginY: Double
+    var cropNormalizedWidth: Double
+    var cropNormalizedHeight: Double
+    var cropFlipHorizontal: Bool
+    var cropFlipVertical: Bool
+
     /// Proportion de recadrage sélectionnée dans la barre d’outils (`DevelopCropAspectPreset.rawValue`).
     var cropAspectPresetRaw: String
+
+    /// Redressement de l'horizon en degrés (−45…+45, neutre = 0).
+    var straightenAngle: Double
 
     /// Retouche locale : centre normalisé ; désactivé si `healNormX` est négatif ou `healRadiusPx` ≤ 0.
     var healNormX: Double
@@ -88,7 +99,7 @@ struct DevelopSettings: Equatable, Sendable {
 
     // MARK: Basique — point noir
 
-    /// −100…100 : assombrit les zones très sombres (type « Point noir »).
+    /// −100…100 : comme Lightroom — positif assombrit les noirs (profondeur), négatif les éclaircit (aspect lavé).
     var blackPoint: Double
 
     // MARK: Clarté sélective — tonalité dominante
@@ -111,9 +122,12 @@ struct DevelopSettings: Equatable, Sendable {
     var levelsInputWhite: Double
     var levelsMidtone: Double
 
-    // MARK: Courbes (approximation par tension du ton maître)
+    // MARK: Courbes (points par canal ; migration JSON depuis `curves*Intensity`)
 
-    var curvesMasterIntensity: Double
+    var toneCurveMaster: ToneCurve
+    var toneCurveRed: ToneCurve
+    var toneCurveGreen: ToneCurve
+    var toneCurveBlue: ToneCurve
 
     // MARK: Supprimer couleur
 
@@ -131,6 +145,9 @@ struct DevelopSettings: Equatable, Sendable {
     var bwIntensity: Double
 
     // MARK: LUT
+    //
+    // Champs persistés pour futurs presets / cubes 3D ; **non appliqués** dans `DevelopPreviewRenderer`
+    // tant qu’un chargeur LUT n’est pas branché (pas d’UI correspondante pour l’instant).
 
     var lutPresetIndex: Int
     var lutMix: Double
@@ -141,16 +158,51 @@ struct DevelopSettings: Equatable, Sendable {
     var vignetteSoftnessAmount: Double
     var vignetteBlackPointAmount: Double
 
+    // MARK: TSL par couleur (8 teintes : Rouge, Orange, Jaune, Vert, Cyan, Bleu, Violet, Magenta)
+
+    var enableTSLPerColor: Bool
+    var tslPerColorPalette: SelectiveColorPalette
+
+    // MARK: Réduction de bruit
+
+    var enableNoiseReduction: Bool
+    var noiseReductionLuminance: Double
+    var noiseReductionChrominance: Double
+
     // MARK: Netteté / Grain (cartes séparées du détail « Clarté »)
 
+    // MARK: Netteté — trois bandes USM RVB (voir `DevelopProSharpening`)
+
+    /// Rayon principal ≈ bande « contours » ; les rayons structure et détail sont dérivés pour les trois passes.
     var sharpnessRadiusPx: Double
+    /// Intensité globale des trois passes USM (structure / contours / détail linéaire).
     var sharpnessAmountPct: Double
+    /// Répartition détail vs structure + seuillage anti‑grain fin (curseur « Détail »).
+    var sharpnessDetailPct: Double
+    /// Masque Sobel : protège les aplats (comme « Masquage » Lightroom).
+    var sharpnessMaskingPct: Double
     var grainSizePct: Double
     var grainIntensityPct: Double
+    /// Irrégularité du grain (mélange texture fine vs plus grossière).
+    var grainRoughnessPct: Double
 
     // MARK: Couleur sélective
 
     var selectivePalette: SelectiveColorPalette
+
+    // MARK: Tone mapping sigmoïde (inspiration darktable iop/sigmoid.c)
+    //
+    // Compression dynamique scene-referred → display-referred avec une courbe sigmoïde
+    // paramétrique. Donne aux images un rendu plus « photographique » (rolloff naturel
+    // sur les hautes lumières, ombres préservées) au lieu du rendu « clipping numérique ».
+
+    var enableToneMapping: Bool
+    /// Pente de la sigmoïde au point d'inflexion (1,0 = neutre, 1,5 = contraste cinéma, 0,7 = doux).
+    var toneMappingContrast: Double
+    /// EV cible pour le « gris moyen » (point pivot ; 0 EV = standard 18 % gris).
+    var toneMappingPivotEV: Double
+    /// Point blanc relatif (1,0 = 100 % display, 0,9 = compression supplémentaire des hautes lumières).
+    var toneMappingWhitePoint: Double
 
     static let neutral = DevelopSettings(
         brightness: 0,
@@ -174,7 +226,14 @@ struct DevelopSettings: Equatable, Sendable {
         cropTop: 0,
         cropRight: 0,
         cropBottom: 0,
+        cropNormalizedOriginX: 0,
+        cropNormalizedOriginY: 0,
+        cropNormalizedWidth: 1,
+        cropNormalizedHeight: 1,
+        cropFlipHorizontal: false,
+        cropFlipVertical: false,
         cropAspectPresetRaw: DevelopCropAspectPreset.free.rawValue,
+        straightenAngle: 0,
         healNormX: -1,
         healNormY: -1,
         healRadiusPx: 0,
@@ -190,11 +249,11 @@ struct DevelopSettings: Equatable, Sendable {
         enableRemoveColor: false,
         enableBlackWhite: false,
         enableLUT: false,
-        enableVignetting: true,
-        enableSharpness: true,
-        enableGrain: true,
-        enableLensCorrection: true,
-        enableMasks: true,
+        enableVignetting: false,
+        enableSharpness: false,
+        enableGrain: false,
+        enableLensCorrection: false,
+        enableMasks: false,
         blackPoint: 0,
         selectiveClarityTone: 1,
         cbHighlightHue: 0,
@@ -206,7 +265,10 @@ struct DevelopSettings: Equatable, Sendable {
         levelsInputBlack: 0,
         levelsInputWhite: 100,
         levelsMidtone: 50,
-        curvesMasterIntensity: 0,
+        toneCurveMaster: .identity,
+        toneCurveRed: .identity,
+        toneCurveGreen: .identity,
+        toneCurveBlue: .identity,
         removeColorHueKey: 120,
         removeColorRange: 50,
         removeColorLumaRange: 25,
@@ -215,17 +277,29 @@ struct DevelopSettings: Equatable, Sendable {
         bwGreen: 0,
         bwBlue: 0,
         bwTone: 0,
-        bwIntensity: 100,
+        bwIntensity: 0,
         lutPresetIndex: 0,
         lutMix: 100,
         vignetteExposureAmount: 0,
         vignetteSoftnessAmount: 100,
         vignetteBlackPointAmount: 0,
-        sharpnessRadiusPx: 2.5,
-        sharpnessAmountPct: 50,
+        enableTSLPerColor: false,
+        tslPerColorPalette: .neutral,
+        enableNoiseReduction: false,
+        noiseReductionLuminance: 0,
+        noiseReductionChrominance: 0,
+        sharpnessRadiusPx: 2.0,
+        sharpnessAmountPct: 0,
+        sharpnessDetailPct: 50,
+        sharpnessMaskingPct: 0,
         grainSizePct: 25,
-        grainIntensityPct: 50,
-        selectivePalette: .neutral
+        grainIntensityPct: 0,
+        grainRoughnessPct: 45,
+        selectivePalette: .neutral,
+        enableToneMapping: false,
+        toneMappingContrast: 1.0,
+        toneMappingPivotEV: 0,
+        toneMappingWhitePoint: 1.0
     )
 
     func encoded() throws -> Data {
@@ -278,14 +352,17 @@ struct DevelopSettings: Equatable, Sendable {
     }
 }
 
-extension DevelopSettings: Codable {
+nonisolated extension DevelopSettings: Codable {
     enum CodingKeys: String, CodingKey {
         case brightness, exposureEV, contrast, saturation, vibrance
         case highlights, shadows, temperature, tint
         case tslHue, tslSaturation, tslLuminance
         case clarity, texture, lensCorrection, chromaticAberration, maskRadialBlend
         case cropLeft, cropTop, cropRight, cropBottom
+        case cropNormalizedOriginX, cropNormalizedOriginY, cropNormalizedWidth, cropNormalizedHeight
+        case cropFlipHorizontal, cropFlipVertical
         case cropAspectPresetRaw
+        case straightenAngle
         case healNormX, healNormY, healRadiusPx
         case enableWhiteBalance, enableBasicAdjustments, enableHueSaturation, enableDetailAdjustments
         case enableSelectiveClarity, enableSelectiveColor, enableColorBalance, enableLevels
@@ -295,13 +372,17 @@ extension DevelopSettings: Codable {
         case cbHighlightHue, cbHighlightSaturation, cbMidtoneHue, cbMidtoneSaturation
         case cbShadowHue, cbShadowSaturation
         case levelsInputBlack, levelsInputWhite, levelsMidtone
-        case curvesMasterIntensity
+        case toneCurveMaster, toneCurveRed, toneCurveGreen, toneCurveBlue
+        case curvesMasterIntensity, curvesRedIntensity, curvesGreenIntensity, curvesBlueIntensity
         case removeColorHueKey, removeColorRange, removeColorLumaRange, removeColorIntensity
+        case enableTSLPerColor, tslPerColorPalette
+        case enableNoiseReduction, noiseReductionLuminance, noiseReductionChrominance
         case bwRed, bwGreen, bwBlue, bwTone, bwIntensity
         case lutPresetIndex, lutMix
         case vignetteExposureAmount, vignetteSoftnessAmount, vignetteBlackPointAmount
-        case sharpnessRadiusPx, sharpnessAmountPct, grainSizePct, grainIntensityPct
+        case sharpnessRadiusPx, sharpnessAmountPct, sharpnessDetailPct, sharpnessMaskingPct, grainSizePct, grainIntensityPct, grainRoughnessPct
         case selectivePalette
+        case enableToneMapping, toneMappingContrast, toneMappingPivotEV, toneMappingWhitePoint
     }
 
     init(from decoder: Decoder) throws {
@@ -329,7 +410,23 @@ extension DevelopSettings: Codable {
         base.cropTop = try c.decodeIfPresent(Double.self, forKey: .cropTop) ?? 0
         base.cropRight = try c.decodeIfPresent(Double.self, forKey: .cropRight) ?? 0
         base.cropBottom = try c.decodeIfPresent(Double.self, forKey: .cropBottom) ?? 0
+
+        if let nx = try c.decodeIfPresent(Double.self, forKey: .cropNormalizedOriginX),
+           let ny = try c.decodeIfPresent(Double.self, forKey: .cropNormalizedOriginY),
+           let nw = try c.decodeIfPresent(Double.self, forKey: .cropNormalizedWidth),
+           let nh = try c.decodeIfPresent(Double.self, forKey: .cropNormalizedHeight) {
+            base.cropNormalizedOriginX = nx
+            base.cropNormalizedOriginY = ny
+            base.cropNormalizedWidth = nw
+            base.cropNormalizedHeight = nh
+        } else {
+            DevelopCropGeometry.migrateNormalizedCropFromLegacyMargins(&base)
+        }
+        base.cropFlipHorizontal = try c.decodeIfPresent(Bool.self, forKey: .cropFlipHorizontal) ?? false
+        base.cropFlipVertical = try c.decodeIfPresent(Bool.self, forKey: .cropFlipVertical) ?? false
+
         base.cropAspectPresetRaw = try c.decodeIfPresent(String.self, forKey: .cropAspectPresetRaw) ?? DevelopCropAspectPreset.free.rawValue
+        base.straightenAngle = try c.decodeIfPresent(Double.self, forKey: .straightenAngle) ?? 0
         base.healNormX = try c.decodeIfPresent(Double.self, forKey: .healNormX) ?? -1
         base.healNormY = try c.decodeIfPresent(Double.self, forKey: .healNormY) ?? -1
         base.healRadiusPx = try c.decodeIfPresent(Double.self, forKey: .healRadiusPx) ?? 0
@@ -366,7 +463,30 @@ extension DevelopSettings: Codable {
         base.levelsInputWhite = try c.decodeIfPresent(Double.self, forKey: .levelsInputWhite) ?? 100
         base.levelsMidtone = try c.decodeIfPresent(Double.self, forKey: .levelsMidtone) ?? 50
 
-        base.curvesMasterIntensity = try c.decodeIfPresent(Double.self, forKey: .curvesMasterIntensity) ?? 0
+        if let m = try c.decodeIfPresent(ToneCurve.self, forKey: .toneCurveMaster) {
+            base.toneCurveMaster = m
+        } else {
+            let leg = try c.decodeIfPresent(Double.self, forKey: .curvesMasterIntensity) ?? 0
+            base.toneCurveMaster = ToneCurve.legacyMaster(fromIntensityPercent: leg)
+        }
+        if let r = try c.decodeIfPresent(ToneCurve.self, forKey: .toneCurveRed) {
+            base.toneCurveRed = r
+        } else {
+            let leg = try c.decodeIfPresent(Double.self, forKey: .curvesRedIntensity) ?? 0
+            base.toneCurveRed = ToneCurve.legacyChannel(fromIntensityPercent: leg)
+        }
+        if let g = try c.decodeIfPresent(ToneCurve.self, forKey: .toneCurveGreen) {
+            base.toneCurveGreen = g
+        } else {
+            let leg = try c.decodeIfPresent(Double.self, forKey: .curvesGreenIntensity) ?? 0
+            base.toneCurveGreen = ToneCurve.legacyChannel(fromIntensityPercent: leg)
+        }
+        if let b = try c.decodeIfPresent(ToneCurve.self, forKey: .toneCurveBlue) {
+            base.toneCurveBlue = b
+        } else {
+            let leg = try c.decodeIfPresent(Double.self, forKey: .curvesBlueIntensity) ?? 0
+            base.toneCurveBlue = ToneCurve.legacyChannel(fromIntensityPercent: leg)
+        }
 
         base.removeColorHueKey = try c.decodeIfPresent(Double.self, forKey: .removeColorHueKey) ?? 120
         base.removeColorRange = try c.decodeIfPresent(Double.self, forKey: .removeColorRange) ?? 50
@@ -386,12 +506,37 @@ extension DevelopSettings: Codable {
         base.vignetteSoftnessAmount = try c.decodeIfPresent(Double.self, forKey: .vignetteSoftnessAmount) ?? 100
         base.vignetteBlackPointAmount = try c.decodeIfPresent(Double.self, forKey: .vignetteBlackPointAmount) ?? 0
 
-        base.sharpnessRadiusPx = try c.decodeIfPresent(Double.self, forKey: .sharpnessRadiusPx) ?? 2.5
-        base.sharpnessAmountPct = try c.decodeIfPresent(Double.self, forKey: .sharpnessAmountPct) ?? 50
+        base.sharpnessRadiusPx = try c.decodeIfPresent(Double.self, forKey: .sharpnessRadiusPx) ?? 2.0
+        base.sharpnessAmountPct = try c.decodeIfPresent(Double.self, forKey: .sharpnessAmountPct) ?? 42
+        base.sharpnessDetailPct = try c.decodeIfPresent(Double.self, forKey: .sharpnessDetailPct) ?? 48
+        base.sharpnessMaskingPct = try c.decodeIfPresent(Double.self, forKey: .sharpnessMaskingPct) ?? 14
         base.grainSizePct = try c.decodeIfPresent(Double.self, forKey: .grainSizePct) ?? 25
         base.grainIntensityPct = try c.decodeIfPresent(Double.self, forKey: .grainIntensityPct) ?? 50
+        base.grainRoughnessPct = try c.decodeIfPresent(Double.self, forKey: .grainRoughnessPct) ?? 45
 
         base.selectivePalette = try c.decodeIfPresent(SelectiveColorPalette.self, forKey: .selectivePalette) ?? .neutral
+
+        base.enableTSLPerColor = try c.decodeIfPresent(Bool.self, forKey: .enableTSLPerColor) ?? false
+        base.tslPerColorPalette = try c.decodeIfPresent(SelectiveColorPalette.self, forKey: .tslPerColorPalette) ?? .neutral
+
+        base.enableNoiseReduction = try c.decodeIfPresent(Bool.self, forKey: .enableNoiseReduction) ?? false
+        base.noiseReductionLuminance = try c.decodeIfPresent(Double.self, forKey: .noiseReductionLuminance) ?? 0
+        base.noiseReductionChrominance = try c.decodeIfPresent(Double.self, forKey: .noiseReductionChrominance) ?? 0
+
+        base.enableToneMapping = try c.decodeIfPresent(Bool.self, forKey: .enableToneMapping) ?? false
+        base.toneMappingContrast = try c.decodeIfPresent(Double.self, forKey: .toneMappingContrast) ?? 1.0
+        base.toneMappingPivotEV = try c.decodeIfPresent(Double.self, forKey: .toneMappingPivotEV) ?? 0
+        base.toneMappingWhitePoint = try c.decodeIfPresent(Double.self, forKey: .toneMappingWhitePoint) ?? 1.0
+
+        if base.straightenAngle.isFinite {
+            base.straightenAngle = max(-45, min(45, base.straightenAngle))
+        } else {
+            base.straightenAngle = 0
+        }
+
+        DevelopCropGeometry.clampNormalizedCrop(in: &base)
+        DevelopCropGeometry.syncLegacyMarginsFromNormalized(&base)
+
         self = base
     }
 
@@ -418,7 +563,14 @@ extension DevelopSettings: Codable {
         try c.encode(cropTop, forKey: .cropTop)
         try c.encode(cropRight, forKey: .cropRight)
         try c.encode(cropBottom, forKey: .cropBottom)
+        try c.encode(cropNormalizedOriginX, forKey: .cropNormalizedOriginX)
+        try c.encode(cropNormalizedOriginY, forKey: .cropNormalizedOriginY)
+        try c.encode(cropNormalizedWidth, forKey: .cropNormalizedWidth)
+        try c.encode(cropNormalizedHeight, forKey: .cropNormalizedHeight)
+        try c.encode(cropFlipHorizontal, forKey: .cropFlipHorizontal)
+        try c.encode(cropFlipVertical, forKey: .cropFlipVertical)
         try c.encode(cropAspectPresetRaw, forKey: .cropAspectPresetRaw)
+        try c.encode(straightenAngle, forKey: .straightenAngle)
         try c.encode(healNormX, forKey: .healNormX)
         try c.encode(healNormY, forKey: .healNormY)
         try c.encode(healRadiusPx, forKey: .healRadiusPx)
@@ -450,7 +602,10 @@ extension DevelopSettings: Codable {
         try c.encode(levelsInputBlack, forKey: .levelsInputBlack)
         try c.encode(levelsInputWhite, forKey: .levelsInputWhite)
         try c.encode(levelsMidtone, forKey: .levelsMidtone)
-        try c.encode(curvesMasterIntensity, forKey: .curvesMasterIntensity)
+        try c.encode(toneCurveMaster, forKey: .toneCurveMaster)
+        try c.encode(toneCurveRed, forKey: .toneCurveRed)
+        try c.encode(toneCurveGreen, forKey: .toneCurveGreen)
+        try c.encode(toneCurveBlue, forKey: .toneCurveBlue)
         try c.encode(removeColorHueKey, forKey: .removeColorHueKey)
         try c.encode(removeColorRange, forKey: .removeColorRange)
         try c.encode(removeColorLumaRange, forKey: .removeColorLumaRange)
@@ -467,8 +622,21 @@ extension DevelopSettings: Codable {
         try c.encode(vignetteBlackPointAmount, forKey: .vignetteBlackPointAmount)
         try c.encode(sharpnessRadiusPx, forKey: .sharpnessRadiusPx)
         try c.encode(sharpnessAmountPct, forKey: .sharpnessAmountPct)
+        try c.encode(sharpnessDetailPct, forKey: .sharpnessDetailPct)
+        try c.encode(sharpnessMaskingPct, forKey: .sharpnessMaskingPct)
         try c.encode(grainSizePct, forKey: .grainSizePct)
         try c.encode(grainIntensityPct, forKey: .grainIntensityPct)
+        try c.encode(grainRoughnessPct, forKey: .grainRoughnessPct)
         try c.encode(selectivePalette, forKey: .selectivePalette)
+        try c.encode(enableTSLPerColor, forKey: .enableTSLPerColor)
+        try c.encode(tslPerColorPalette, forKey: .tslPerColorPalette)
+        try c.encode(enableNoiseReduction, forKey: .enableNoiseReduction)
+        try c.encode(noiseReductionLuminance, forKey: .noiseReductionLuminance)
+        try c.encode(noiseReductionChrominance, forKey: .noiseReductionChrominance)
+
+        try c.encode(enableToneMapping, forKey: .enableToneMapping)
+        try c.encode(toneMappingContrast, forKey: .toneMappingContrast)
+        try c.encode(toneMappingPivotEV, forKey: .toneMappingPivotEV)
+        try c.encode(toneMappingWhitePoint, forKey: .toneMappingWhitePoint)
     }
 }

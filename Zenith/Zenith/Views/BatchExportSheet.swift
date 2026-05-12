@@ -8,12 +8,13 @@ import SwiftUI
 
 struct BatchExportSheet: View {
     let photos: [PhotoRecord]
+    /// Démarre l'export à l'extérieur de la feuille pour que la progression soit visible dans la barre du haut.
+    var onStart: (([PhotoRecord], URL, BatchExportFormat, CGFloat) -> Void)?
 
     @Environment(\.dismiss) private var dismiss
 
     @State private var format: BatchExportFormat = .jpeg
     @State private var quality: Double = 0.92
-    @State private var errorMessage: String?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
@@ -24,8 +25,7 @@ struct BatchExportSheet: View {
                 .font(.callout)
                 .foregroundStyle(.secondary)
 
-            Text(String(format: String(localized: "batch.export.count_format"), photos.count))
-                .font(.subheadline)
+            countSummary
 
             Picker(String(localized: "batch.export.format"), selection: $format) {
                 ForEach(BatchExportFormat.allCases) { f in
@@ -55,7 +55,7 @@ struct BatchExportSheet: View {
                     dismiss()
                 }
                 Button(String(localized: "batch.export.choose_folder")) {
-                    runExport()
+                    pickDestinationAndStart()
                 }
                 .keyboardShortcut(.defaultAction)
                 .disabled(photos.isEmpty)
@@ -64,17 +64,26 @@ struct BatchExportSheet: View {
         .padding(24)
         .frame(minWidth: 440)
         .background(ZenithTheme.pageBackground)
-        .alert(String(localized: "batch.export.error.title"), isPresented: Binding(
-            get: { errorMessage != nil },
-            set: { if !$0 { errorMessage = nil } }
-        )) {
-            Button("OK", role: .cancel) { errorMessage = nil }
-        } message: {
-            Text(errorMessage ?? "")
+    }
+
+    @ViewBuilder
+    private var countSummary: some View {
+        if photos.isEmpty {
+            Label(String(localized: "batch.export.no_selection"), systemImage: "exclamationmark.triangle.fill")
+                .font(.subheadline)
+                .foregroundStyle(.orange)
+        } else {
+            HStack(spacing: 6) {
+                Image(systemName: "photo.stack")
+                    .foregroundStyle(.secondary)
+                Text(String(format: String(localized: "batch.export.count_format"), photos.count))
+                    .font(.subheadline)
+                    .foregroundStyle(.primary)
+            }
         }
     }
 
-    private func runExport() {
+    private func pickDestinationAndStart() {
         guard !photos.isEmpty else { return }
         let panel = NSOpenPanel()
         panel.canChooseDirectories = true
@@ -83,16 +92,7 @@ struct BatchExportSheet: View {
         panel.prompt = String(localized: "batch.export.choose_folder.prompt")
         guard panel.runModal() == .OK, let url = panel.url else { return }
 
-        do {
-            try BatchExporter.export(
-                photos: photos,
-                to: url,
-                format: format,
-                quality: CGFloat(quality)
-            )
-            dismiss()
-        } catch {
-            errorMessage = error.localizedDescription
-        }
+        onStart?(photos, url, format, CGFloat(quality))
+        dismiss()
     }
 }

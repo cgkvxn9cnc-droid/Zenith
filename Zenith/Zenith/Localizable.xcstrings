@@ -4,6 +4,9 @@
     "" : {
 
     },
+    "%" : {
+
+    },
     "%@, %lld étoiles" : {
       "localizations" : {
         "en" : {
@@ -14,7 +17,17 @@
         }
       }
     },
-    "%lld%%" : {
+    "%@%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@%2$@"
+          }
+        }
+      }
+    },
+    "%lld" : {
 
     },
     "%lld×%lld" : {
@@ -73,6 +86,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Enregistrer la sauvegarde du catalogue"
+          }
+        }
+      }
+    },
+    "batch.export.cancel_help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click to cancel the running export"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquer pour annuler l’export en cours"
           }
         }
       }
@@ -141,6 +170,22 @@
         }
       }
     },
+    "batch.export.error.no_photos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing to export. Select photos in the library first."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rien à exporter. Sélectionne d’abord des photos dans la bibliothèque."
+          }
+        }
+      }
+    },
     "batch.export.error.render" : {
       "localizations" : {
         "en" : {
@@ -158,6 +203,7 @@
       }
     },
     "batch.export.error.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -185,6 +231,56 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Format"
+          }
+        }
+      }
+    },
+    "batch.export.help" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export selected photos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter les photos sélectionnées"
+          }
+        }
+      }
+    },
+    "batch.export.help_empty" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select one or more photos to enable export"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionne une ou plusieurs photos pour activer l’export"
+          }
+        }
+      }
+    },
+    "batch.export.no_selection" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No photo selected"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune photo sélectionnée"
           }
         }
       }
@@ -253,6 +349,102 @@
         }
       }
     },
+    "catalog.error.bookmark_creation_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not save access for “%@”. Try selecting the catalog folder again."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’enregistrer l’accès pour « %@ ». Sélectionnez à nouveau le dossier du catalogue."
+          }
+        }
+      }
+    },
+    "catalog.error.not_found_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog not found: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogue introuvable : %@"
+          }
+        }
+      }
+    },
+    "catalog.error.recent_mismatch_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please select exactly this catalog folder: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez exactement ce dossier catalogue : %@"
+          }
+        }
+      }
+    },
+    "catalog.error.scope_denied_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Access denied to “%@”. Check permissions or reopen the catalog from the file dialog."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès refusé à « %@ ». Vérifiez les autorisations ou rouvrez le catalogue via le sélecteur de fichiers."
+          }
+        }
+      }
+    },
+    "catalog.overview.actions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quick actions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions rapides"
+          }
+        }
+      }
+    },
+    "catalog.overview.backup" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export backup"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exporter une sauvegarde"
+          }
+        }
+      }
+    },
     "catalog.overview.body" : {
       "localizations" : {
         "en" : {
@@ -265,6 +457,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Le catalogue regroupe la bibliothèque, chaque photo importée (référence vers les fichiers) et toutes les données de post-production non destructives associées à chaque cliché."
+          }
+        }
+      }
+    },
+    "catalog.overview.health" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog health"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Santé du catalogue"
+          }
+        }
+      }
+    },
+    "catalog.overview.health_empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No photos yet — import images to get started."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune photo — importez des images pour commencer."
+          }
+        }
+      }
+    },
+    "catalog.overview.health_ok" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog is healthy."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le catalogue est en bonne santé."
           }
         }
       }
@@ -285,6 +525,38 @@
         }
       }
     },
+    "catalog.overview.import_lightroom" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from Lightroom…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer depuis Lightroom…"
+          }
+        }
+      }
+    },
+    "catalog.overview.last_save %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last auto-save: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dernière sauvegarde auto : %@"
+          }
+        }
+      }
+    },
     "catalog.overview.nav" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -298,6 +570,184 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vue d’ensemble"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogs known to Zenith"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogues connus de Zenith"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.active_badge" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvert"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No catalog has been opened yet."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun catalogue n’a encore été ouvert."
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Each catalog opened by Zenith stays here. The dot indicates whether it is currently readable (green) or located on a disk that is unavailable (red)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque catalogue ouvert par Zenith reste listé ici. La pastille indique s’il est actuellement lisible (vert) ou s’il se trouve sur un disque indisponible (rouge)."
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.locate" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Locate this catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Localiser ce catalogue"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.open" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open this catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir ce catalogue"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.refresh" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Refresh availability"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actualiser la disponibilité"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.status.active" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Currently open in Zenith"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actuellement ouvert dans Zenith"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.status.available" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Available · readable by Zenith"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disponible · lisible par Zenith"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.status.needs_relocation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Found on disk but Zenith needs you to grant access again"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Présent sur disque mais Zenith doit redemander l’accès"
+          }
+        }
+      }
+    },
+    "catalog.overview.opened_section.status.unreachable" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unreachable · the disk may be disconnected or the file moved"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Introuvable · le disque est peut-être débranché ou le fichier a été déplacé"
           }
         }
       }
@@ -334,6 +784,22 @@
         }
       }
     },
+    "catalog.overview.stat_size" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estimated size"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille estimée"
+          }
+        }
+      }
+    },
     "catalog.overview.title" : {
       "localizations" : {
         "en" : {
@@ -350,7 +816,40 @@
         }
       }
     },
+    "catalog.reopen.panel_message_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This catalog was saved before automatic reopening was available. Select the “%@” package in the dialog to restore access."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce catalogue date d’avant l’enregistrement de l’accès automatique. Sélectionnez à nouveau le dossier « %@ » dans la fenêtre pour restaurer l’accès."
+          }
+        }
+      }
+    },
+    "catalog.reopen.panel_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select this catalog again"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resélectionnez ce catalogue"
+          }
+        }
+      }
+    },
     "catalog.sheet.done" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -799,7 +1298,40 @@
         }
       }
     },
+    "collection.new.headline" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New collection"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle collection"
+          }
+        }
+      }
+    },
+    "collection.new.placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collection name"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom de la collection"
+          }
+        }
+      }
+    },
     "collection.new.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -811,6 +1343,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Nom"
+          }
+        }
+      }
+    },
+    "color.cmyk.softproof.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CMYK soft proof mode on (screen note only)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mode preuve CMJN (indication écran uniquement)"
+          }
+        }
+      }
+    },
+    "color.profile.embedded.unnamed" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embedded profile"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil embarqué"
+          }
+        }
+      }
+    },
+    "color.profile.status.assumed.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untagged — assumed %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Non taggé — profil assumé : %@"
+          }
+        }
+      }
+    },
+    "color.profile.status.cmyk" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CMYK — preview converted to RGB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CMJN — aperçu converti en RVB"
+          }
+        }
+      }
+    },
+    "color.profile.status.embedded.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embedded profile: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil embarqué : %@"
+          }
+        }
+      }
+    },
+    "color.profile.status.raw" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAW — camera linear (no embedded ICC path)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAW — linéaire boîtier (pas de lecture ICC bitmap)"
           }
         }
       }
@@ -832,6 +1460,7 @@
       }
     },
     "develop.auto_adjust_hint" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -911,7 +1540,40 @@
         }
       }
     },
+    "develop.basics.hue_sat_section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hue & saturation"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teinte et saturation"
+          }
+        }
+      }
+    },
+    "develop.basics.tones_section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exposure & tone"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exposition et tons"
+          }
+        }
+      }
+    },
     "develop.brightness" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1008,6 +1670,7 @@
       }
     },
     "develop.ca" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1024,6 +1687,7 @@
       }
     },
     "develop.card.basic" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1035,6 +1699,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Basique"
+          }
+        }
+      }
+    },
+    "develop.card.basics_group" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basics"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basiques"
           }
         }
       }
@@ -1060,13 +1740,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Color balance"
+            "value" : "Color Grading"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bal. couleurs"
+            "value" : "Color Grading"
           }
         }
       }
@@ -1087,6 +1767,23 @@
         }
       }
     },
+    "develop.card.detail_sharpness_grain" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharpness & grain"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netteté et grain"
+          }
+        }
+      }
+    },
     "develop.card.grain" : {
       "localizations" : {
         "en" : {
@@ -1099,6 +1796,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Grain"
+          }
+        }
+      }
+    },
+    "develop.card.grain_and_noise" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grain & noise"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grain et bruit"
           }
         }
       }
@@ -1121,6 +1834,7 @@
       }
     },
     "develop.card.hue_sat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1137,6 +1851,7 @@
       }
     },
     "develop.card.lens" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1153,6 +1868,7 @@
       }
     },
     "develop.card.levels" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1169,6 +1885,7 @@
       }
     },
     "develop.card.lut" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1185,6 +1902,7 @@
       }
     },
     "develop.card.masks" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1200,7 +1918,24 @@
         }
       }
     },
+    "develop.card.noise_reduction" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noise reduction"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réduction de bruit"
+          }
+        }
+      }
+    },
     "develop.card.remove_color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1217,6 +1952,7 @@
       }
     },
     "develop.card.selective_clarity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1233,6 +1969,7 @@
       }
     },
     "develop.card.selective_color" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1264,7 +2001,41 @@
         }
       }
     },
+    "develop.card.tone_mapping" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tone mapping"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mapping tonal"
+          }
+        }
+      }
+    },
+    "develop.card.tsl_per_color" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HSL per color"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TSL par couleur"
+          }
+        }
+      }
+    },
     "develop.card.vignette" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1360,6 +2131,54 @@
         }
       }
     },
+    "develop.channel.blue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blue"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleu"
+          }
+        }
+      }
+    },
+    "develop.channel.green" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Green"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vert"
+          }
+        }
+      }
+    },
+    "develop.channel.red" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Red"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rouge"
+          }
+        }
+      }
+    },
     "develop.channel.rgb" : {
       "localizations" : {
         "en" : {
@@ -1404,6 +2223,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Réglages"
+          }
+        }
+      }
+    },
+    "develop.compare.after" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après"
+          }
+        }
+      }
+    },
+    "develop.compare.before" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avant"
           }
         }
       }
@@ -1568,6 +2419,70 @@
         }
       }
     },
+    "develop.crop.aspect.instagram_feed_landscape" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — feed landscape (~1.91:1)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — fil paysage (~1,91:1)"
+          }
+        }
+      }
+    },
+    "develop.crop.aspect.instagram_feed_portrait" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — feed portrait (4:5)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — publication portrait (4:5)"
+          }
+        }
+      }
+    },
+    "develop.crop.aspect.instagram_feed_square" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — square post (1:1)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — carré (1:1)"
+          }
+        }
+      }
+    },
+    "develop.crop.aspect.instagram_story" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — story / reels (9:16)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Instagram — story / reels (9:16)"
+          }
+        }
+      }
+    },
     "develop.crop.aspect.original" : {
       "localizations" : {
         "en" : {
@@ -1580,6 +2495,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Original"
+          }
+        }
+      }
+    },
+    "develop.crop.auto_horizon" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto horizon (Vision)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Horizon auto (Vision)"
           }
         }
       }
@@ -1601,18 +2532,66 @@
         }
       }
     },
-    "develop.crop.drag_hint" : {
+    "develop.crop.cmd_reset_hint" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Drag inside the frame to move it, or drag the corners to resize."
+            "value" : "Hold ⌘ to show crop reset."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Faites glisser l’intérieur du cadre pour le déplacer, ou les coins pour redimensionner."
+            "value" : "Maintenez ⌘ pour afficher « Réinitialiser le recadrage »."
+          }
+        }
+      }
+    },
+    "develop.crop.drag_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag inside the frame to move it, or drag corners to resize. Pinch or ⌘‑scroll zooms."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glissez à l’intérieur du cadre pour le déplacer, les coins pour la taille ; pincement ou ⌘ + molette pour zoomer."
+          }
+        }
+      }
+    },
+    "develop.crop.flip_horizontal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flip horizontally"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retourner horizontalement"
+          }
+        }
+      }
+    },
+    "develop.crop.flip_vertical" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flip vertically"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retourner verticalement"
           }
         }
       }
@@ -1646,6 +2625,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Réinitialiser le recadrage"
+          }
+        }
+      }
+    },
+    "develop.crop.straighten" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Straighten"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redressement"
           }
         }
       }
@@ -1684,7 +2679,90 @@
         }
       }
     },
+    "develop.curve.add_point" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add point"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter un point"
+          }
+        }
+      }
+    },
+    "develop.curve.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag control points. Anchors (0,0) and (1,1) stay fixed."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Faites glisser les points. Les ancres (0,0) et (1,1) restent fixes."
+          }
+        }
+      }
+    },
+    "develop.curve.reset" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset curve"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réinitialiser la courbe"
+          }
+        }
+      }
+    },
+    "develop.curves.blue" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blue"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleu"
+          }
+        }
+      }
+    },
+    "develop.curves.green" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Green"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vert"
+          }
+        }
+      }
+    },
     "develop.curves.master" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1696,6 +2774,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Courbe maître"
+          }
+        }
+      }
+    },
+    "develop.curves.red" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Red"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rouge"
+          }
+        }
+      }
+    },
+    "develop.detail_adjustments.hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noise reduction, sharpening, and film grain run only when this is on."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réduction de bruit, netteté et grain ne s’appliquent que si cette option est activée."
+          }
+        }
+      }
+    },
+    "develop.detail_adjustments.master" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detail pipeline"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pipeline détail"
+          }
+        }
+      }
+    },
+    "develop.detail.grain_section" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grain"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Grain"
+          }
+        }
+      }
+    },
+    "develop.detail.sharpness_section" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharpness"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Netteté"
           }
         }
       }
@@ -1716,18 +2879,34 @@
         }
       }
     },
-    "develop.footer.compare_hint" : {
+    "develop.footer.compare" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Compare with original file"
+            "value" : "Before / After"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Comparer au fichier d’origine"
+            "value" : "Avant / après"
+          }
+        }
+      }
+    },
+    "develop.footer.compare_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Press and hold to show the original file; release to return to the edit."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenez enfoncé pour voir le fichier d’origine ; relâchez pour revenir au développement."
           }
         }
       }
@@ -1748,7 +2927,57 @@
         }
       }
     },
+    "develop.footer.reset_all" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset all"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout réinitialiser"
+          }
+        }
+      }
+    },
+    "develop.footer.reset_all_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restore default settings for this photo (develop settings and undo history cleared)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rétablit les réglages par défaut pour cette photo (réglages développement et historique annuler/refaire réinitialisés)."
+          }
+        }
+      }
+    },
+    "develop.footer.reset_group_hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up to three panels can stay open. Hover a panel title or any control in that group, then press ⌘⌥= to reset the whole group."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trois panneaux au maximum restent ouverts. Survolez le titre d’un groupe ou un de ses réglages, puis ⌘⌥= pour réinitialiser tout le groupe."
+          }
+        }
+      }
+    },
     "develop.global_saturation" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1764,18 +2993,67 @@
         }
       }
     },
-    "develop.grain.intensity" : {
+    "develop.grain.hint" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intensity"
+            "value" : "CIRandomGenerator (cropped), Gaussian blur controls particle size, high-pass removes DC; luminance extracted via Rec.709 matrix; additive blend with original, masked by a bell-shaped CIToneCurve on scene luminance (midtones strongest). Roughness mixes a finer, higher-contrast noise branch. Noise pattern is deterministic across frames unless you perturb externally—film-static vs cinema grain."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intensité"
+            "value" : "`CIRandomGenerator` recadré, flou Gaussien pour la taille, passe‑haut pour retirer le DC ; luminance Rec.709 puis addition avec l’originale masquée par une cloche `CIToneCurve` sur la luminance (tons moyens). Rugosité : mélange avec une voie plus fine et contrastée. Texture déterministe entre images tant que le générateur n’est pas perturbé (grain figé vs grain vivant)."
+          }
+        }
+      }
+    },
+    "develop.grain.intensity" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantité"
+          }
+        }
+      }
+    },
+    "develop.grain.intensity_zero_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensity is at zero — grain is off. Raise Intensity to see the grain."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intensité à zéro : aucun grain. Montez l’intensité pour voir l’effet."
+          }
+        }
+      }
+    },
+    "develop.grain.roughness" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Roughness"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rugosité"
           }
         }
       }
@@ -1862,6 +3140,7 @@
       }
     },
     "develop.lens" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1878,6 +3157,7 @@
       }
     },
     "develop.levels.black" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1894,6 +3174,7 @@
       }
     },
     "develop.levels.midtone" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1910,6 +3191,7 @@
       }
     },
     "develop.levels.white" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1926,6 +3208,7 @@
       }
     },
     "develop.lut.cinematic" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1942,6 +3225,7 @@
       }
     },
     "develop.lut.cool" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1958,6 +3242,7 @@
       }
     },
     "develop.lut.intensity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1974,6 +3259,7 @@
       }
     },
     "develop.lut.none" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1990,6 +3276,7 @@
       }
     },
     "develop.lut.warm" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2006,6 +3293,7 @@
       }
     },
     "develop.mask_radial" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2037,6 +3325,38 @@
         }
       }
     },
+    "develop.noise.chrominance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chrominance"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chrominance"
+          }
+        }
+      }
+    },
+    "develop.noise.luminance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luminance"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luminance"
+          }
+        }
+      }
+    },
     "develop.pixelmator.panel_title" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2055,6 +3375,7 @@
       }
     },
     "develop.remove.intensity" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2071,6 +3392,7 @@
       }
     },
     "develop.remove.luma" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2087,6 +3409,7 @@
       }
     },
     "develop.remove.range" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2238,6 +3561,7 @@
       }
     },
     "develop.selective_clarity.hint" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2254,6 +3578,7 @@
       }
     },
     "develop.selective.hue" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2270,6 +3595,7 @@
       }
     },
     "develop.selective.lum" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2286,6 +3612,7 @@
       }
     },
     "develop.selective.sat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2323,13 +3650,78 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intensity"
+            "value" : "Amount"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Intensité"
+            "value" : "Quantité"
+          }
+        }
+      }
+    },
+    "develop.sharpness.amount_zero_hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Amount is at zero — sharpening is off. Raise Amount to apply Detail and Masking."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quantité à zéro : aucune netteté appliquée. Augmentez la quantité pour activer Détail et Masquage."
+          }
+        }
+      }
+    },
+    "develop.sharpness.detail" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detail / threshold"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Détail / seuil"
+          }
+        }
+      }
+    },
+    "develop.sharpness.hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Three-band linear RGB unsharp mask (structure → contours → detail) before display gamma. Threshold softening per band; Sobel edge blend protects flats; highlights tapered by luminance. Uses CIContext linear working space. Preview debounced."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trois passes USM **RVB linéaires** (structure large rayon → contours → détail fin), avant le gamma d’affichage ; seuil doux par bande ; masque Sobel pour les aplats ; atténuation progressive dans les hautes lumières. Espace de travail linéaire du `CIContext`. Aperçu debouncé."
+          }
+        }
+      }
+    },
+    "develop.sharpness.masking" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masking"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquage"
           }
         }
       }
@@ -2351,6 +3743,7 @@
       }
     },
     "develop.slider.brilliance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2466,7 +3859,76 @@
         }
       }
     },
+    "develop.tone_mapping.contrast" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contrast"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contraste"
+          }
+        }
+      }
+    },
+    "develop.tone_mapping.hint" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigmoid compression: natural rolloff on highlights, preserved shadows."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compression sigmoïde : rolloff naturel des hautes lumières, ombres préservées."
+          }
+        }
+      }
+    },
+    "develop.tone_mapping.pivot" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pivot (EV)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pivot (EV)"
+          }
+        }
+      }
+    },
+    "develop.tone_mapping.white_point" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "White point"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Point blanc"
+          }
+        }
+      }
+    },
     "develop.tone.highlight" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2483,6 +3945,7 @@
       }
     },
     "develop.tone.mid" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2499,6 +3962,7 @@
       }
     },
     "develop.tone.shadow" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2601,13 +4065,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enable targeted color removal"
+            "value" : "Jump to Grain & noise adjustments"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Activer la suppression de couleur ciblée"
+            "value" : "Afficher la carte Grain et bruit"
           }
         }
       }
@@ -2695,7 +4159,216 @@
         }
       }
     },
+    "develop.tsl.blue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Blue"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bleu"
+          }
+        }
+      }
+    },
+    "develop.tsl.cyan" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyan"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cyan"
+          }
+        }
+      }
+    },
+    "develop.tsl.green" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Green"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vert"
+          }
+        }
+      }
+    },
+    "develop.tsl.hue" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hue"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Teinte"
+          }
+        }
+      }
+    },
+    "develop.tsl.luminance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luminance"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Luminance"
+          }
+        }
+      }
+    },
+    "develop.tsl.magenta" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magenta"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Magenta"
+          }
+        }
+      }
+    },
+    "develop.tsl.orange" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orange"
+          }
+        }
+      }
+    },
+    "develop.tsl.red" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Red"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rouge"
+          }
+        }
+      }
+    },
+    "develop.tsl.saturation" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saturation"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saturation"
+          }
+        }
+      }
+    },
+    "develop.tsl.violet" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Violet"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Violet"
+          }
+        }
+      }
+    },
+    "develop.tsl.yellow" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yellow"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jaune"
+          }
+        }
+      }
+    },
+    "develop.value.accessibility" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Numeric value"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valeur numérique"
+          }
+        }
+      }
+    },
+    "develop.value.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type a value, Return to apply. Up and Down arrows step by 5 (percent) or a finer step for decimal ranges."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir une valeur, Entrée pour appliquer. Flèches haut / bas : pas de 5 (pourcentages) ou pas plus fin pour les plages décimales."
+          }
+        }
+      }
+    },
     "develop.vibrance" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2712,6 +4385,7 @@
       }
     },
     "develop.vignette.black_point" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2728,6 +4402,7 @@
       }
     },
     "develop.vignette.exposure" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2744,6 +4419,7 @@
       }
     },
     "develop.vignette.softness" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -2825,6 +4501,22 @@
         }
       }
     },
+    "import.error.all_failed_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import failed for all %1$lld files. First error: %2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun fichier importé sur %1$lld. Première erreur : %2$@"
+          }
+        }
+      }
+    },
     "import.error.limit_format" : {
       "localizations" : {
         "en" : {
@@ -2841,6 +4533,22 @@
         }
       }
     },
+    "import.error.permission_denied_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not access %@ (permission denied)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès refusé à %@."
+          }
+        }
+      }
+    },
     "import.message" : {
       "localizations" : {
         "en" : {
@@ -2853,6 +4561,198 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sélectionnez des images RAW ou standards à importer."
+          }
+        }
+      }
+    },
+    "import.warning.partial_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld photos imported, %2$lld skipped. First error: %3$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld photos importées, %2$lld ignorées. Première erreur : %3$@"
+          }
+        }
+      }
+    },
+    "library.delete.cancel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "library.delete.catalog_only" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from library"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer de la bibliothèque"
+          }
+        }
+      }
+    },
+    "library.delete.error.unresolved" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source file could not be located"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le fichier source est introuvable"
+          }
+        }
+      }
+    },
+    "library.delete.message_multi_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose how the %lld selected photos should be removed. The catalog references are always deleted; the original files on disk are only moved to the Trash if you ask for it."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis comment supprimer les %lld photos sélectionnées. Les références dans le catalogue sont toujours retirées ; les fichiers sources ne sont déplacés vers la corbeille que si tu le demandes."
+          }
+        }
+      }
+    },
+    "library.delete.message_single_fallback" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose whether the source file should also be moved to the Trash. The catalog reference is always deleted."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis si le fichier source doit également être déplacé vers la corbeille. La référence dans le catalogue est toujours retirée."
+          }
+        }
+      }
+    },
+    "library.delete.message_single_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose how %@ should be removed. The catalog reference is always deleted; the original file on disk is only moved to the Trash if you ask for it."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis comment supprimer %@. La référence dans le catalogue est toujours retirée ; le fichier source n’est déplacé vers la corbeille que si tu le demandes."
+          }
+        }
+      }
+    },
+    "library.delete.move_to_trash" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove and move source to Trash"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer et déplacer la source vers la corbeille"
+          }
+        }
+      }
+    },
+    "library.delete.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete this photo?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer cette photo ?"
+          }
+        }
+      }
+    },
+    "library.delete.title_multi" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete these photos?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer ces photos ?"
+          }
+        }
+      }
+    },
+    "library.drop.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drop photos to import"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déposez vos photos pour les importer"
+          }
+        }
+      }
+    },
+    "library.grid.delete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer…"
           }
         }
       }
@@ -2885,6 +4785,615 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Aucune photo dans cette vue"
+          }
+        }
+      }
+    },
+    "library.grid.move" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Move to"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déplacer vers"
+          }
+        }
+      }
+    },
+    "library.grid.move.new" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New collection…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle collection…"
+          }
+        }
+      }
+    },
+    "library.metadata.added" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutée"
+          }
+        }
+      }
+    },
+    "library.metadata.aspect" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aspect"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ratio"
+          }
+        }
+      }
+    },
+    "library.metadata.aspect.landscape" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Landscape"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Paysage"
+          }
+        }
+      }
+    },
+    "library.metadata.aspect.portrait" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portrait"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Portrait"
+          }
+        }
+      }
+    },
+    "library.metadata.aspect.square" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Square"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carré"
+          }
+        }
+      }
+    },
+    "library.metadata.aspect.unknown" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Unknown"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inconnu"
+          }
+        }
+      }
+    },
+    "library.metadata.dimensions" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dimensions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dimensions"
+          }
+        }
+      }
+    },
+    "library.metadata.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a photo to view its metadata."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez une photo pour voir ses métadonnées."
+          }
+        }
+      }
+    },
+    "library.metadata.exif.aperture" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperture"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouverture"
+          }
+        }
+      }
+    },
+    "library.metadata.exif.focal" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focal length"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Focale"
+          }
+        }
+      }
+    },
+    "library.metadata.exif.shutter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shutter speed"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vitesse"
+          }
+        }
+      }
+    },
+    "library.metadata.exif.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EXIF"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EXIF"
+          }
+        }
+      }
+    },
+    "library.metadata.flag" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Flag"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drapeau"
+          }
+        }
+      }
+    },
+    "library.metadata.flag.none" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun"
+          }
+        }
+      }
+    },
+    "library.metadata.flag.pick" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Picked"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retenue"
+          }
+        }
+      }
+    },
+    "library.metadata.flag.reject" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejected"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rejetée"
+          }
+        }
+      }
+    },
+    "library.metadata.name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
+          }
+        }
+      }
+    },
+    "library.metadata.rating" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rating"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notation"
+          }
+        }
+      }
+    },
+    "library.metadata.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metadata"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Métadonnées"
+          }
+        }
+      }
+    },
+    "library.multi_selection.count_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld photos selected"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld photos sélectionnées"
+          }
+        }
+      }
+    },
+    "library.multi_selection.deselect_a11y" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clears the multi-selection."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efface la multi-sélection."
+          }
+        }
+      }
+    },
+    "library.multi_selection.deselect_help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Click to clear the selection."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cliquez pour effacer la sélection."
+          }
+        }
+      }
+    },
+    "library.multi_selection.help" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hold ⌘ and click to add or remove photos. Rating, flagging, and deleting apply to every selected photo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenez ⌘ et cliquez pour ajouter ou retirer des photos. Notation, drapeaux et suppression s’appliquent à toutes les photos sélectionnées."
+          }
+        }
+      }
+    },
+    "library.thumb_size.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thumbnail size"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille des vignettes"
+          }
+        }
+      }
+    },
+    "lr.import.error.access_cancelled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog access was cancelled."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accès au catalogue annulé."
+          }
+        }
+      }
+    },
+    "lr.import.error.missing_tables" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This file doesn’t look like a valid Lightroom Classic catalog (expected tables are missing)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier ne ressemble pas à un catalogue Lightroom Classic valide (tables attendues absentes)."
+          }
+        }
+      }
+    },
+    "lr.import.error.no_images" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No master photos were found in this catalog."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune photo maîtresse trouvée dans ce catalogue."
+          }
+        }
+      }
+    },
+    "lr.import.error.no_root_folders" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This catalog doesn’t contain recognizable Lightroom root folders."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ce fichier ne contient pas de dossiers racine Lightroom reconnaissables."
+          }
+        }
+      }
+    },
+    "lr.import.error.no_roots_on_disk" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No root folder was authorized. Try again and choose the folder that contains your photos for each requested root."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun dossier racine n’a été autorisé. Réessayez et sélectionnez le dossier qui contient vos photos pour chaque racine demandée."
+          }
+        }
+      }
+    },
+    "lr.import.error.query_prepare" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not analyze this Lightroom catalog (SQL)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’analyser ce catalogue Lightroom (requête SQL)."
+          }
+        }
+      }
+    },
+    "lr.import.error.sqlite_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not open the Lightroom catalog: %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Impossible d’ouvrir le catalogue Lightroom : %@"
+          }
+        }
+      }
+    },
+    "lr.import.grant_folder_message_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select the folder that matches “%@” so Zenith can read your original files."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez le dossier correspondant à « %@ » pour que Zenith puisse lire vos fichiers originaux."
+          }
+        }
+      }
+    },
+    "lr.import.grant_folder_missing_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This folder is missing on this Mac: %@. Select the folder where your photos now live."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le dossier suivant est introuvable sur ce Mac : %@. Sélectionnez l’emplacement actuel de vos photos."
+          }
+        }
+      }
+    },
+    "lr.import.grant_folder_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow access to photos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser l’accès aux photos"
+          }
+        }
+      }
+    },
+    "lr.import.panel_message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a Lightroom Classic catalog file (.lrcat)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez un fichier catalogue Lightroom Classic (.lrcat)."
+          }
+        }
+      }
+    },
+    "lr.import.panel_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Lightroom catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer un catalogue Lightroom"
           }
         }
       }
@@ -3051,6 +5560,22 @@
         }
       }
     },
+    "menu.file.import_lightroom" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Lightroom catalog…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importer un catalogue Lightroom…"
+          }
+        }
+      }
+    },
     "menu.file.invite" : {
       "localizations" : {
         "en" : {
@@ -3079,6 +5604,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Choisir un dossier synchronisé (iCloud/Dropbox/Drive)…"
+          }
+        }
+      }
+    },
+    "menu.file.settings" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zenith Settings…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Réglages de Zenith…"
           }
         }
       }
@@ -3234,6 +5775,7 @@
       }
     },
     "navigation.title" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3249,8 +5791,37 @@
         }
       }
     },
-    "OK" : {
-
+    "preset.empty.body" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjust a photo, give the preset a name, then click + to save it for later."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Règle une photo, nomme le préréglage, puis clique sur + pour l’enregistrer."
+          }
+        }
+      }
+    },
+    "preset.empty.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No presets yet"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun préréglage"
+          }
+        }
+      }
     },
     "preset.header" : {
       "localizations" : {
@@ -3264,6 +5835,86 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Préréglages"
+          }
+        }
+      }
+    },
+    "preset.menu.apply_focus" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply to current photo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appliquer à la photo courante"
+          }
+        }
+      }
+    },
+    "preset.menu.apply_selection_format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apply to %lld selected photos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appliquer aux %lld photos sélectionnées"
+          }
+        }
+      }
+    },
+    "preset.menu.delete" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete preset"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer le préréglage"
+          }
+        }
+      }
+    },
+    "preset.menu.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preset actions"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actions du préréglage"
+          }
+        }
+      }
+    },
+    "preset.menu.rename" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renommer"
           }
         }
       }
@@ -3284,7 +5935,72 @@
         }
       }
     },
+    "preset.rename.confirm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renommer"
+          }
+        }
+      }
+    },
+    "preset.rename.message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a new name for this preset."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis un nouveau nom pour ce préréglage."
+          }
+        }
+      }
+    },
+    "preset.rename.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rename preset"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Renommer le préréglage"
+          }
+        }
+      }
+    },
+    "preset.row.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-click to apply"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Double-clique pour appliquer"
+          }
+        }
+      }
+    },
     "preset.save" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3300,7 +6016,40 @@
         }
       }
     },
+    "preset.save.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save the current photo's adjustments as a preset"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enregistrer les réglages de la photo courante comme préréglage"
+          }
+        }
+      }
+    },
+    "preset.save.hint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saves every adjustment of the focused photo (exposure, color, crop, healing, etc.)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Capture l’ensemble des réglages de la photo active (exposition, couleur, recadrage, retouche…)."
+          }
+        }
+      }
+    },
     "preset.sync_grid" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3312,6 +6061,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Appliquer les réglages courants à toutes les photos de cette vue"
+          }
+        }
+      }
+    },
+    "preview.center" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Center image"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Centrer l’image"
           }
         }
       }
@@ -3328,6 +6093,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sélectionnez une image ou importez des fichiers (⇧⌘I)."
+          }
+        }
+      }
+    },
+    "preview.zoom.field_help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Type a custom zoom percentage"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saisir un pourcentage de zoom personnalisé"
           }
         }
       }
@@ -3382,6 +6163,1029 @@
         }
       }
     },
+    "settings.catalog.active_name" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom"
+          }
+        }
+      }
+    },
+    "settings.catalog.active_path" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Path"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chemin"
+          }
+        }
+      }
+    },
+    "settings.catalog.active_section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open catalog on disk"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogue ouvert sur le disque"
+          }
+        }
+      }
+    },
+    "settings.catalog.active_section.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The catalog is a package folder on disk; photos may live elsewhere."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le catalogue est un paquet dossier sur le disque ; les photos peuvent être ailleurs."
+          }
+        }
+      }
+    },
+    "settings.catalog.approximate_size" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Approximate size"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille approximative"
+          }
+        }
+      }
+    },
+    "settings.catalog.auto_restore" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reopen last catalog at launch"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rouvrir le dernier catalogue au lancement"
+          }
+        }
+      }
+    },
+    "settings.catalog.auto_restore.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires a saved security bookmark for the catalog."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nécessite un signet de sécurité enregistré pour le catalogue."
+          }
+        }
+      }
+    },
+    "settings.catalog.autosave_picker" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-save interval"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervalle d’enregistrement automatique"
+          }
+        }
+      }
+    },
+    "settings.catalog.autosave.1m" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every minute"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Chaque minute"
+          }
+        }
+      }
+    },
+    "settings.catalog.autosave.2m" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 2 minutes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les 2 minutes"
+          }
+        }
+      }
+    },
+    "settings.catalog.autosave.5m" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 5 minutes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les 5 minutes"
+          }
+        }
+      }
+    },
+    "settings.catalog.autosave.10m" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Every 10 minutes"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toutes les 10 minutes"
+          }
+        }
+      }
+    },
+    "settings.catalog.autosave.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Applies while a catalog is open. Shorter intervals use more disk I/O."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "S’applique lorsqu’un catalogue est ouvert. Un intervalle court augmente les écritures disque."
+          }
+        }
+      }
+    },
+    "settings.catalog.no_catalog_open" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No catalog is open in the main window."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun catalogue n’est ouvert dans la fenêtre principale."
+          }
+        }
+      }
+    },
+    "settings.catalog.show_in_finder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show in Finder"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher dans le Finder"
+          }
+        }
+      }
+    },
+    "settings.color.assumed.adobe" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adobe RGB (1998)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adobe RVB (1998)"
+          }
+        }
+      }
+    },
+    "settings.color.assumed.picker" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Untagged RGB files"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fichiers RVB sans profil"
+          }
+        }
+      }
+    },
+    "settings.color.assumed.prophoto" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ProPhoto RGB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ProPhoto RVB"
+          }
+        }
+      }
+    },
+    "settings.color.assumed.srgb" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sRGB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sRVB"
+          }
+        }
+      }
+    },
+    "settings.color.cmyk_softproof" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CMYK soft proof hint (preview)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indication preuve écran CMJN (aperçu)"
+          }
+        }
+      }
+    },
+    "settings.color.display_p3" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display P3 preview output"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sortie aperçu Display P3"
+          }
+        }
+      }
+    },
+    "settings.color.preview.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display P3 uses wide-gamut output when your display supports it. CMYK soft proof shows a reminder for CMYK assets; it does not simulate full print separation."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display P3 produit une sortie large gamme si l’écran le permet. La preuve CMJN affiche un rappel pour les fichiers CMJN ; elle ne simule pas une séparation d’impression complète."
+          }
+        }
+      }
+    },
+    "settings.color.preview.section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Screen preview"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu à l’écran"
+          }
+        }
+      }
+    },
+    "settings.color.section" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couleur"
+          }
+        }
+      }
+    },
+    "settings.color.section.footer" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embedded ICC profiles are read from files. Untagged RGB uses the profile you choose. Display P3 uses wide-gamut output when your display supports it. CMYK soft proof adds an on-screen note for CMYK sources; full separation simulation may follow in a later version."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les profils ICC embarqués sont lus dans les fichiers. Les RVB non taggés utilisent le profil choisi. Display P3 produit une sortie large gamme si l’écran le permet. La preuve CMJN ajoute une indication à l’écran pour les sources CMJN ; une simulation complète pourra suivre."
+          }
+        }
+      }
+    },
+    "settings.color.source.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Embedded ICC profiles are read from tagged files. Untagged RGB images use the profile below, then are converted to Zenith’s Develop linear working space."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les profils ICC embarqués sont lus pour les fichiers tagués. Les images RVB non taguées utilisent le profil ci-dessous, puis sont converties vers l’espace de travail linéaire Develop de Zenith."
+          }
+        }
+      }
+    },
+    "settings.color.source.section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RGB file interpretation"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interprétation des fichiers RVB"
+          }
+        }
+      }
+    },
+    "settings.interface.collaboration.enabled" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enable collaboration (invite flow)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer la collaboration (invitation)"
+          }
+        }
+      }
+    },
+    "settings.interface.collaboration.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The invite sheet is available from the workspace; this toggle reflects the same preference."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La feuille d’invitation reste accessible depuis l’espace de travail ; ce réglage est le même partout."
+          }
+        }
+      }
+    },
+    "settings.interface.collaboration.role" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default role"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rôle par défaut"
+          }
+        }
+      }
+    },
+    "settings.interface.collaboration.section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collaboration"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collaboration"
+          }
+        }
+      }
+    },
+    "settings.interface.filmstrip" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show filmstrip"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la pellicule"
+          }
+        }
+      }
+    },
+    "settings.interface.font_scale.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adjusts Dynamic Type for Zenith UI text."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajuste la taille de texte (Dynamic Type) pour l’interface Zenith."
+          }
+        }
+      }
+    },
+    "settings.interface.font_scale.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text size step: %lld / %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palier de taille du texte : %lld / %lld"
+          }
+        }
+      }
+    },
+    "settings.interface.left_sidebar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show left sidebar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la barre latérale gauche"
+          }
+        }
+      }
+    },
+    "settings.interface.library_thumb" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Library thumbnail size"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taille des vignettes (bibliothèque)"
+          }
+        }
+      }
+    },
+    "settings.interface.library_thumb.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current: %lld px"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Actuel : %lld px"
+          }
+        }
+      }
+    },
+    "settings.interface.right_sidebar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show right sidebar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la barre latérale droite"
+          }
+        }
+      }
+    },
+    "settings.interface.section" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Workspace"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espace de travail"
+          }
+        }
+      }
+    },
+    "settings.performance.balanced" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Balanced"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Équilibré"
+          }
+        }
+      }
+    },
+    "settings.performance.balanced.detail" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default preview resolution and cache size for most Macs."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Résolution d’aperçu et cache par défaut, adaptés à la majorité des Mac."
+          }
+        }
+      }
+    },
+    "settings.performance.clear_caches" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear in-memory preview and thumbnail caches"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vider les caches d’aperçu et de miniatures (mémoire vive)"
+          }
+        }
+      }
+    },
+    "settings.performance.clear_caches.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Only RAM is cleared; catalog files on disk are unchanged."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seule la mémoire vive est libérée ; les fichiers du catalogue sur disque ne sont pas modifiés."
+          }
+        }
+      }
+    },
+    "settings.performance.clear_caches.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frees RAM used by develop previews and decoded thumbnails; previews reload on next view."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libère la RAM des aperçus Développement et des miniatures décodées ; rechargement à l’affichage suivant."
+          }
+        }
+      }
+    },
+    "settings.performance.custom_full" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Full preview max side (px)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu plein — côté long max (px)"
+          }
+        }
+      }
+    },
+    "settings.performance.custom_mode" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom memory limits"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limites mémoire personnalisées"
+          }
+        }
+      }
+    },
+    "settings.performance.custom_mode.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Overrides the preset profile while enabled. Turning it off restores the chosen profile."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remplace le profil prédéfini tant que l’option est active. Désactivé, le profil choisi s’applique à nouveau."
+          }
+        }
+      }
+    },
+    "settings.performance.custom_proxy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Proxy preview max side (px)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu proxy — côté long max (px)"
+          }
+        }
+      }
+    },
+    "settings.performance.custom_source_capacity.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cached develop sources (LRU): %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources Développement en cache (LRU) : %lld"
+          }
+        }
+      }
+    },
+    "settings.performance.custom_thumb_count.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thumbnail cache count limit: %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre max de miniatures en cache : %lld"
+          }
+        }
+      }
+    },
+    "settings.performance.custom_thumb_memory.format" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thumbnail cache RAM budget: %lld MB"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Budget RAM miniatures : %lld Mo"
+          }
+        }
+      }
+    },
+    "settings.performance.efficiency" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efficiency (less RAM / CPU)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Efficacité (moins de RAM / CPU)"
+          }
+        }
+      }
+    },
+    "settings.performance.efficiency.detail" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lower develop preview resolution, fewer cached RAW sources, smaller thumbnail memory pool."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu développement plus léger, moins d’images RAW en cache, pool mémoire des miniatures réduit."
+          }
+        }
+      }
+    },
+    "settings.performance.profile_picker" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Performance profile"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil de performance"
+          }
+        }
+      }
+    },
+    "settings.performance.quality" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview fidelity (more RAM)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fidélité d’aperçu (plus de RAM)"
+          }
+        }
+      }
+    },
+    "settings.performance.quality.detail" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sharper develop preview and larger caches; best on machines with plenty of memory."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu développement plus net et caches plus larges ; adapté aux machines avec beaucoup de mémoire."
+          }
+        }
+      }
+    },
+    "settings.performance.section.footer" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These presets only change how much RAM Zenith uses for previews and decoded thumbnails—not files on disk."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ces préréglages règlent surtout la RAM pour les aperçus et les miniatures décodées, pas l’espace disque du catalogue."
+          }
+        }
+      }
+    },
+    "settings.section.catalog" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogue"
+          }
+        }
+      }
+    },
+    "settings.section.performance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAM and CPU (previews)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RAM et CPU (aperçus)"
+          }
+        }
+      }
+    },
+    "settings.tab.catalog" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogue"
+          }
+        }
+      }
+    },
+    "settings.tab.color" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couleur"
+          }
+        }
+      }
+    },
+    "settings.tab.interface" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interface"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Interface"
+          }
+        }
+      }
+    },
+    "settings.tab.performance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Performance"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Performance"
+          }
+        }
+      }
+    },
     "sidebar.collections_help" : {
       "localizations" : {
         "en" : {
@@ -3394,6 +7198,38 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Crée une collection sous « Collections »."
+          }
+        }
+      }
+    },
+    "sidebar.collections.empty" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No collection yet"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune collection pour l’instant"
+          }
+        }
+      }
+    },
+    "sidebar.library_all" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Library"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bibliothèque"
           }
         }
       }
@@ -3415,6 +7251,7 @@
       }
     },
     "sidebar.section.by_date" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3447,6 +7284,22 @@
         }
       }
     },
+    "sidebar.section.collections" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collections"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Collections"
+          }
+        }
+      }
+    },
     "sidebar.section.hierarchy.catalog" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3465,6 +7318,7 @@
       }
     },
     "sidebar.section.hierarchy.library" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3476,6 +7330,102 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bibliothèque"
+          }
+        }
+      }
+    },
+    "sidebar.sort.date_newest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date · Newest first"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date · Plus récents d’abord"
+          }
+        }
+      }
+    },
+    "sidebar.sort.date_oldest" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date · Oldest first"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Date · Plus anciens d’abord"
+          }
+        }
+      }
+    },
+    "sidebar.sort.help" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort folders"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier les dossiers"
+          }
+        }
+      }
+    },
+    "sidebar.sort.menu_label" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sort by"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trier par"
+          }
+        }
+      }
+    },
+    "sidebar.sort.name_asc" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name · A → Z"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom · A → Z"
+          }
+        }
+      }
+    },
+    "sidebar.sort.name_desc" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name · Z → A"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom · Z → A"
           }
         }
       }
@@ -3611,6 +7561,294 @@
         }
       }
     },
+    "welcome.create" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouveau catalogue"
+          }
+        }
+      }
+    },
+    "welcome.create.cancel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Annuler"
+          }
+        }
+      }
+    },
+    "welcome.create.choose_folder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisir"
+          }
+        }
+      }
+    },
+    "welcome.create.choose_message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose where to save the new catalog."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez où enregistrer le nouveau catalogue."
+          }
+        }
+      }
+    },
+    "welcome.create.confirm" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer"
+          }
+        }
+      }
+    },
+    "welcome.create.name_placeholder" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalog name"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom du catalogue"
+          }
+        }
+      }
+    },
+    "welcome.create.sheet_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create a new catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créer un nouveau catalogue"
+          }
+        }
+      }
+    },
+    "welcome.create.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start a fresh catalog for a new project."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Démarrez un catalogue vierge pour un nouveau projet."
+          }
+        }
+      }
+    },
+    "welcome.error.ok" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "welcome.error.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erreur"
+          }
+        }
+      }
+    },
+    "welcome.open" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir un catalogue"
+          }
+        }
+      }
+    },
+    "welcome.open.panel_message" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a .zenithcatalog folder to open."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sélectionnez un dossier .zenithcatalog à ouvrir."
+          }
+        }
+      }
+    },
+    "welcome.open.panel_title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open catalog"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir un catalogue"
+          }
+        }
+      }
+    },
+    "welcome.open.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resume work on an existing catalog."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reprenez le travail sur un catalogue existant."
+          }
+        }
+      }
+    },
+    "welcome.recents" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recent catalogs"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Catalogues récents"
+          }
+        }
+      }
+    },
+    "welcome.recents.remove" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remove from recent list"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Retirer de la liste des récents"
+          }
+        }
+      }
+    },
+    "welcome.subtitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Create or open a catalog to begin editing your photos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Créez ou ouvrez un catalogue pour commencer à retoucher vos photos."
+          }
+        }
+      }
+    },
+    "welcome.title" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Welcome to Zenith"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bienvenue dans Zenith"
+          }
+        }
+      }
+    },
     "window.menu.title" : {
       "localizations" : {
         "en" : {
@@ -3623,6 +7861,55 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fenêtre"
+          }
+        }
+      }
+    },
+    "workspace.catalog.open_help" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open the catalog overview"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la vue d’ensemble du catalogue"
+          }
+        }
+      }
+    },
+    "workspace.filmstrip.hide" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide filmstrip"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Masquer la pellicule"
+          }
+        }
+      }
+    },
+    "workspace.filmstrip.show" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show filmstrip"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher la pellicule"
           }
         }
       }
@@ -3661,6 +7948,7 @@
       }
     },
     "workspace.mode.develop" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3676,7 +7964,25 @@
         }
       }
     },
+    "workspace.mode.home_a11y" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Home"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Accueil"
+          }
+        }
+      }
+    },
     "workspace.mode.library" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3693,17 +7999,18 @@
       }
     },
     "workspace.mode.picker_a11y" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Workspace area: library or develop"
+            "value" : "Workspace area: home, library, or develop"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Zone de travail : bibliothèque ou développement"
+            "value" : "Zone de travail : accueil, bibliothèque ou développement"
           }
         }
       }
@@ -3725,6 +8032,7 @@
       }
     },
     "workspace.sidebar.hide" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -3741,6 +8049,7 @@
       }
     },
     "workspace.sidebar.show" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

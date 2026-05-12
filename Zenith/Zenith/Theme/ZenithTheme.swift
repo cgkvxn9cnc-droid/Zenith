@@ -27,26 +27,21 @@ enum ZenithTheme {
 
     static let developPanelBackground = pageBackground
 
-    /// Barre latérale gauche : coins arrondis côté contenu (bord intérieur).
-    static var sidebarGlassShapeLeading: UnevenRoundedRectangle {
-        UnevenRoundedRectangle(
-            topLeadingRadius: 0,
-            bottomLeadingRadius: 0,
-            bottomTrailingRadius: 18,
-            topTrailingRadius: 18,
-            style: .continuous
-        )
-    }
+    // MARK: - Colonnes latérales (largeurs et marges harmonisées entre Bibliothèque / Catalogue / Développement)
 
-    /// Barre latérale droite : coins arrondis côté contenu.
-    static var sidebarGlassShapeTrailing: UnevenRoundedRectangle {
-        UnevenRoundedRectangle(
-            topLeadingRadius: 18,
-            bottomLeadingRadius: 18,
-            bottomTrailingRadius: 0,
-            topTrailingRadius: 0,
-            style: .continuous
-        )
+    /// Largeur unique de la colonne gauche (navigation + marges liste après correction du padding).
+    static let sidebarLeadingColumnWidth: CGFloat = 288
+    /// Largeur unique de la colonne droite (métadonnées bibliothèque · réglages développement).
+    static let sidebarTrailingColumnWidth: CGFloat = 336
+
+    /// Marge horizontale interne commune aux colonnes (titres, listes, métadonnées, développement).
+    static let sidebarColumnHorizontalPadding: CGFloat = 14
+    /// Espacement vertical autour du premier bloc sous la ligne de séparation (segmented).
+    static let sidebarColumnSectionVerticalPadding: CGFloat = 10
+
+    /// Barre latérale flottante : tous les coins restent visibles quand le panneau est inset sous la barre du haut.
+    static var sidebarFloatingGlassShape: RoundedRectangle {
+        RoundedRectangle(cornerRadius: 18, style: .continuous)
     }
 
     /// Barre chrome supérieure : coins arrondis (flotte sous la zone titre).
@@ -66,6 +61,23 @@ enum ZenithTheme {
             shape
                 .fill(.ultraThinMaterial)
                 .overlay(shape.stroke(glassStroke, lineWidth: 1))
+        }
+    }
+
+    /// Variante très allégée du verre : utilisée pour la barre du haut afin de discerner l’image qui passe derrière.
+    @ViewBuilder
+    static func translucentChromeGlass<S: Shape>(_ shape: S) -> some View {
+        if #available(macOS 26.0, *) {
+            shape
+                .fill(.clear)
+                .glassEffect(.regular.interactive(), in: shape)
+                .overlay(shape.fill(Color.black.opacity(0.04)))
+                .overlay(shape.stroke(glassStroke.opacity(0.85), lineWidth: 1))
+        } else {
+            shape
+                .fill(.ultraThinMaterial)
+                .opacity(0.78)
+                .overlay(shape.stroke(glassStroke.opacity(0.85), lineWidth: 1))
         }
     }
 

@@ -7,8 +7,8 @@ import Foundation
 import ImageIO
 
 /// Lecture minimale des propriétés EXIF pour la ligne « ISO · focale · ouverture · vitesse » (style Lightroom).
-enum PhotoEXIFFormatter {
-    struct Line {
+nonisolated enum PhotoEXIFFormatter {
+    struct Line: Sendable {
         let iso: String?
         let focalLengthMM: String?
         let aperture: String?

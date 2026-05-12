@@ -9,8 +9,23 @@ import SwiftUI
 // MARK: - AppKit chrome (barre de titre / plein contenu)
 
 enum ZenithWindowChrome {
+    /// Évite la réentrance (modifier le chrome peut relancer `updateNSView` / notifications).
+    private static var applyingWindowIDs = Set<ObjectIdentifier>()
+
     /// Applique le masquage de barre de titre + contenu sous les boutons système (correctif Tahoe / fenêtres SwiftUI).
     static func apply(to window: NSWindow) {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { apply(to: window) }
+            return
+        }
+        /// Fenêtre déjà retirée de l’app (notification différée, sheet fermée, etc.) : ne pas toucher aux ivars.
+        guard NSApplication.shared.windows.contains(where: { $0 === window }) else { return }
+
+        let oid = ObjectIdentifier(window)
+        guard !applyingWindowIDs.contains(oid) else { return }
+        applyingWindowIDs.insert(oid)
+        defer { applyingWindowIDs.remove(oid) }
+
         window.title = ""
         window.titleVisibility = .hidden
         window.titlebarAppearsTransparent = true
@@ -40,7 +55,12 @@ enum ZenithWindowChrome {
     }
 
     static func refreshAllWindows() {
-        for window in NSApplication.shared.windows {
+        guard Thread.isMainThread else {
+            DispatchQueue.main.async { refreshAllWindows() }
+            return
+        }
+        /// Copie : itérer pendant `apply` peut synchroniser l’ordre des fenêtres.
+        for window in Array(NSApplication.shared.windows) {
             apply(to: window)
         }
     }
@@ -99,10 +119,9 @@ struct WindowChromeConfigurator: NSViewRepresentable {
         if let window = nsView.window {
             ZenithWindowChrome.apply(to: window)
         } else {
-            DispatchQueue.main.async {
-                if let window = nsView.window {
-                    ZenithWindowChrome.apply(to: window)
-                }
+            DispatchQueue.main.async { [weak nsView] in
+                guard let nsView, let window = nsView.window else { return }
+                ZenithWindowChrome.apply(to: window)
             }
         }
     }
